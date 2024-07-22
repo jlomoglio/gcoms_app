@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block additional_css %}
+<style>
+	input {
+		border: 1px solid #ccc;
+		border-radius: 4px;
+	}
+
+	.btn {
+		background-color: #1d55ec !important;
+		color: white!important;
+		padding: 14px 20px!important;
+		margin: 8px 0!important;
+		border: 1px solid #1d55ec !important;
+		border-radius: 4px !important;
+		cursor: pointer !important;
+		margin-right: 15px !important;
+	}
+</style>
+{% endblock %}
+
+{% block module_container %}
+<h1>Add User</h1>
+
+<form action="/add-user" method="POST" class="flex flex-col w-[300px] mt-[20px]">
+	<label for="username">Username</label>
+	<input type="text" name="username" placeholder="enter username" class="p-[6px] m-[4px]">
+
+	<label for="email">Email</label>
+	<input type="email" name="email" placeholder="enter email" class="p-[6px] m-[4px]">
+
+	<label for="first_name">First Name</label>
+	<input type="text" name="first_name" placeholder="enter first name" class="p-[6px] m-[4px]">
+
+	<label for="last_name">Last Name</label>
+	<input type="text" name="last_name" placeholder="enter last name" class="p-[6px] m-[4px]">
+
+	<label for="password1">Password</label>
+	<input type="text" name="password1" placeholder="enter password" class="p-[6px] m-[4px]">
+
+	<label for="password2">Confirm Password</label>
+	<input type="text" name="password2" placeholder="confirm password" class="p-[6px] m-[4px]">
+
+	<div class="flex flex-row">
+		<button type="submit" class="btn">Submit</button>
+		<button type="reset" class="btn">Reset</button>
+	</div>
+</form>
+{% endblock %}

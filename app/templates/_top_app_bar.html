@@ -1,0 +1,39 @@
+<div id="top-app-bar" class="flex flex-row fixed top-0 left-0 right-0 h-[40px] z-[200] bg-[#0052a9]">
+	<div class="flex flex-col w-full pt-[3px] ml-[10px] select-none">
+		<div class="flex mr-[8px]">
+			<i class="ph-bold ph-dots-nine text-white text-[26px]"></i>
+		</div>
+	</div>
+
+	<div class="absolute top-[10px] right-0 flex flex-row" x-data="{ showUserMenu: false }">
+		<div class="flex ml-[8px] mr-[8px]">
+			<i class="ph ph-calendar text-white text-[20px]"></i>
+		</div>
+
+		<div class="flex ml-[8px] mr-[8px]">
+			<i class="ph ph-envelope text-white text-[20px]"></i>
+		</div>
+
+		<div class="flex ml-[8px] mr-[8px]">
+			<i class="ph ph-chat-circle-dots text-white text-[20px]"></i>
+		</div>
+
+		<div class="flex ml-[8px] mr-[8px]">
+			<i class="ph ph-video-conference text-white text-[20px]"></i>
+		</div>
+
+		<div class="flex ml-[8px] mr-[8px]">
+			<div 
+				class="avatar select-none" 
+				@click="showUserMenu=!showUserMenu" 
+				@click.away="showUserMenu=false"
+			>JL</div>
+		</div>
+		<div x-show="showUserMenu" class="user-menu">
+			<div class="user-menu-item">Profile</div>
+			<div class="user-menu-item">Help</div>
+			<div class="border border-b-[1px solid #ccc] w-auto ml-[10px] mr-[10px]"></div>
+			<div class="user-menu-item" onclick="window.location='/logout'">Logout</div>
+		</div>
+	</div>
+</div>

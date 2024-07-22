@@ -1,0 +1,162 @@
+<div id="left-toolbar" x-data class="flex flex-col !w-[184px] fixed pt-[40px] top-[0px] left-0 bottom-0 z-[100] border border-r-[1px solid #ccc] bg-[#F0F0F0]">
+			
+    <!-- DASHBOARD -->
+    <a 
+        x-data 
+        class="toolbar-item flex flex-row w-[144px] pt-[6px] pb-[6px] select-none cursor-pointer" 
+        href="/dashboard"
+    >
+        <i class="ph ph-gauge text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Dashboard</div>
+    </a>
+    <!-- END DASHBOARD -->
+    
+    
+    <hr>
+
+
+    <!-- CALENDAR -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-calendar text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Calendar</div>
+    </div>
+    <!-- END CALENDAR -->
+
+    <!-- CONTACTS -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-address-book text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Contacts</div>
+    </div>
+    <!-- END CONTACTS -->
+
+    <!-- EMAIL -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-envelope text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Email</div>
+    </div>
+    <!-- END EMAIL -->
+
+
+    <!-- CHAT -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-chat-circle-dots text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Chat</div>
+    </div>
+    <!-- END CHAT -->
+
+    <!-- VIDEO CONFERENCE -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-video-conference text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Video Meeting</div>
+    </div>
+    <!-- END VIDEO CONFERENCE -->
+
+
+    <hr>
+
+    
+    <!-- REGIONS-->
+    <a 
+        x-data="{ tooltip: false }" 
+        class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none cursor-pointer" 
+        href="/regions"
+    >
+        <i class="ph ph-map-pin-line text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Regions</div>
+    </a>
+    <!-- END REGIONS -->
+    
+    <!-- MANUFACTURING -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-factory text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Manufacturing</div>
+    </div>
+    <!-- END MANUFACTURING -->
+    
+    <!-- FARMING -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-tractor text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Farming</div>
+    </div>
+    <!-- END FARMING -->
+    
+    <!-- UTILITIES -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-solar-panel text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Utilities</div>
+    </div>
+    <!-- END UTILITIES -->
+
+    
+    <hr>
+    
+    
+    <!-- DOCUMENTS -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-files text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Documents</div>
+    </div>
+    <!-- END DOCUMENTS -->
+
+    
+    <!-- KNOWLEDGE BASE -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-books text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Knowledge Base</div>
+    </div>
+    <!-- END KNOWLEDGE BASE -->
+
+    
+    <!-- ASSESMENTS -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-list-checks text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Assesments</div>
+    </div>
+    <!-- END ASSESMENTS -->
+
+    
+    <!-- COMMISSIONING -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-stack text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Commissioning</div>
+    </div>
+    <!-- END COMMISSIONING -->
+
+    
+    <!-- ACTION ITEMS -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-push-pin text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Action Items</div>
+    </div>
+    <!-- END ACTION ITEMS -->
+
+
+    
+    <!-- DIVIDER -------------------------------------------------------------------------------------->
+    <hr>
+    <!------------------------------------------------------------------------------------------------->
+
+
+
+    <!-- ACCOUNTING -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-money text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Accounting</div>
+    </div>
+    <!-- END ACCOUNTING -->
+
+
+
+    <!-- DIVIDER -------------------------------------------------------------------------------------->
+    <hr>
+    <!------------------------------------------------------------------------------------------------->
+
+
+    <!-- SUPER PAC -->
+    <div x-data="{ tooltip: false }" class="toolbar-item flex flex-row w-full pt-[6px] pb-[6px] select-none">
+        <i class="ph ph-users-three text-[#5a5a5a] text-[20px] ml-[10px] mr-[6px]"></i>
+        <div class="text-[11px] text-[#5a5a5a] w-full tracking-wide p-1">Super PAC</div>
+    </div>
+    <!-- END SUPER PAC -->
+
+</div>

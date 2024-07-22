@@ -1,0 +1,237 @@
+#locations-container {
+	width: 100% !important;
+	height: 100% !important;
+	position: absolute;
+}
+
+#location-list-header {
+	box-shadow: inset 10px 0px 10px -10px rgba(0, 0, 0, 0.45);
+	background-color: white;
+}
+
+#location-list-scroller {
+	scrollbar-width: medium;
+	border-top: 1px solid #ccc;
+}
+
+.last-card:last-child {
+	margin-bottom: 25px;
+}
+
+#location-details-container {
+	width: 100% !important;
+	height: 100% !important;
+	position: relative;
+	z-index: 150 !important;
+	display: none;
+}
+
+
+/** FORM ELEMENTS **************************************/
+#add-form-wrapper {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+#add-region-form {
+	width: 900px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+#form-container {
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	display: flex;
+	flex-direction: row;
+	box-sizing: border-box;
+}
+
+#form-instructions {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+#left-col {
+	width: 450px;
+	height: auto;
+	display: none;
+	flex-direction: column;
+	padding: 20px;
+	box-sizing: border-box;
+	position: fixed !important;
+	left: 20px;
+	border: 1px solid red;
+}
+
+#right-col {
+	width: 450px;
+	height: auto;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	box-sizing: border-box;
+	position: absolute !important;
+	left: 20px;
+	border: 1px solid red;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 15px;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.select,
+.form-input {
+	height: 30px !important;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding-left: 10px;
+	font-size: .8em !important;
+	color: #5a5a5a !important;
+	margin-top: 5px;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.form-textarea {
+	height: 80px !important;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	padding-left: 10px;
+	font-size: .8em !important;
+	color: #5a5a5a !important;
+	margin-top: 5px;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+option {
+	padding: 4px;
+	height: 24px !important;
+}
+
+.form-label {
+	font-size: .8em !important;
+	font-weight: 650;
+	color: #5a5a5a;
+	user-select: none;
+}
+
+.continent-menu-item,
+.country-menu-item {
+	padding-left: 10px !important;
+}
+
+.continent-menu-item:hover,
+.country-menu-item:hover {
+	background-color: #d2d2d2;
+}
+
+.disabled {
+	color: #ccc;
+	cursor: default;
+}
+
+
+/** MAP MARKERS **************************************/
+.marker-pin {
+	width: 30px;
+	height: 30px;
+	border-radius: 50% 50% 50% 0;
+
+	position: absolute;
+	transform: rotate(-45deg);
+	left: 50%;
+	top: 50%;
+	margin: -15px 0 0 -15px;
+}
+
+.marker-pin::after {
+	content: '';
+	width: 24px;
+	height: 24px;
+	margin: 3px 0 0 3px;
+	background: #fff;
+	position: absolute;
+	border-radius: 50%;
+}
+
+
+.custom-div-icon i {
+	position: absolute;
+	width: 22px;
+	font-size: 22px;
+	left: 0;
+	right: 0;
+	margin: 10px auto;
+	text-align: center;
+}
+
+.custom-div-icon i.awesome {
+	margin: 12px auto;
+	margin-top: 14px;
+	font-size: 18px !important;
+}
+
+i.awesome {
+	margin: 12px auto;
+	margin-top: 14px;
+	font-size: 18px !important;
+}
+
+
+.center-item {
+	margin: auto;
+	width: 50%;
+}
+
+
+/** SCROLLBARS **************************************/
+/* 
+https://ishadeed.com/article/custom-scrollbars-css/
+*/
+::-webkit-scrollbar {
+	width: 14px;
+}
+
+::-webkit-scrollbar-track {
+	display: block;
+	background-color: #d2d2d2;
+	box-shadow: inset 10px 0px 10px -10px rgba(0, 0, 0, 0.45);
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgb(127, 127, 127);
+	border-radius: 8px;
+}
+
+
+.small-scroll::-webkit-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+.small-scroll::-webkit-scrollbar-track {
+	display: none;
+}
+
+.small-scroll::-webkit-scrollbar-thumb {
+	display: none;
+}
+
+
+
+
+.color-test {
+	background-color: hsla(221, 100%, 62%, 0.226)
+}

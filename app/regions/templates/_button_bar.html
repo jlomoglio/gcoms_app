@@ -1,0 +1,21 @@
+<div class="flex flex-row gap-[10px] fixed right-[280px] top-[46px]">
+    <div class="w-[36px] h-[32px] p-[5px] flex text-center mr-[10px]" style="border-radius: 6px; border: 1px solid #ccc; cursor: pointer;" @click="showSearchBar=!showSearchBar">
+        <i class="fas fa-search-location text-[20px] ml-[2px]"></i>
+    </div>
+    
+    <div class="w-[36px] h-[32px] p-[5px] flex text-center" style="border-radius: 6px; border: 1px solid #ccc; cursor: pointer;" @click="loadSatMap()">
+        <i class="fa fa-satellite text-[20px] ml-[2px]"></i>
+    </div>
+   
+    <div class="w-[36px] h-[32px] p-[5px] flex text-center" style="border-radius: 6px; border: 1px solid #ccc; cursor: pointer;" @click="loadRoadMap()">
+        <i class="fa fa-road text-[20px]"></i>
+    </div>
+    
+    <button
+        class="outline-btn w-[100px] ml-[0px] mr-[0px] mb-[10px] text-[12px] p-[6px]"
+        style="border-radius: 6px; border: 1px solid #ccc;"
+        onclick="resetMap('28.01888', '-82.11469')"
+    >
+        Reset Map
+    </button>
+</div>

@@ -1,0 +1,96 @@
+<div 
+class="absolute w-[900px] h-[44px] top-[50px] right-[400px] flex flex-row !z-[1000] border border-[#a8a8a8] border-[2px] bg-white shadow-lg rounded" 
+x-show="showSearchBar"
+@click.outside="showSearchBar = false"
+>
+<div
+    x-data="{manage_project_details_submenu_open: false}"
+    class="w-full m-[0px] mt-[5px] flex flex-row"
+>
+    <div
+        id="manage-project-details-menu"
+        class="w-[180px] h-[32px] ml-[5px] mr-[10px]"
+        style="border: 1px solid #ccc; border-radius: 4px; position: relative; cursor: pointer"
+        @click="manage_project_details_submenu_open = true"
+    >
+        <div class="text-[12px] p-[10px] w-[200px] h-[23px] mt-[-4px]">Search by</div>
+        <img
+            src="https://img.icons8.com/material-rounded/24/5a5a5a/expand-arrow--v1.png"
+            alt="menu_caret"
+            class="w-[20px] h-[20px] absolute right-[10px] top-[4px]"
+        />
+    </div>
+    <div
+        id="manage-project-details-submenu"
+        x-show="manage_project_details_submenu_open"
+        class="w-[180px] h-[180px] ml-[5px]"
+        style="
+            background-color: #fff; 
+            border: 1px solid #ccc; 
+            box-shadow: 4px 4px 14px 0px rgba(0,0,0,0.45); 
+            border-radius: 4px; 
+            position: absolute; 
+            top: 38px;
+            z-index: 3000 !important;"
+    >
+        <ul
+            class="w-[full] p-[5px] text-[13px]"
+            x-show="manage_project_details_submenu_open"
+            @click.outside="manage_project_details_submenu_open = false"
+            x-cloak
+        >
+            <li
+                hx-get="/project/get_edit_proj_info_form/{{ projId }}"
+                hx-target="#project-subviews"
+                hx-swap="innerHTML"
+                hx-trigger="click"
+                class="cursor-pointer p-[5px] pl-[10px] hover:bg-[#ccc]"
+                style="border-radius: 4px;"
+                @click="manage_project_details_submenu_open = false"
+            >
+                Location Number
+            </li>
+            
+            <li
+                hx-get="/project/get_add_owner_form"
+                hx-target="#project-subviews"
+                hx-swap="innerHTML"
+                hx-trigger="click"
+                class="cursor-pointer p-[5px] pl-[10px] hover:bg-[#ccc]"
+                style="border-radius: 4px;"
+                @click="manage_project_details_submenu_open = false"
+            >
+                Location Name
+            </li>
+            
+            <li
+                hx-get="/project/get_add_sub_form"
+                hx-target="#project-subviews"
+                hx-swap="innerHTML"
+                hx-trigger="click"
+                class="cursor-pointer p-[5px] pl-[10px] hover:bg-[#ccc]"
+                style="border-radius: 4px;"
+                @click="manage_project_details_submenu_open = false"
+            >
+                Location Manager
+            </li>
+        </ul>
+    </div>
+</div>
+
+<input 
+    name="location_search" 
+    id="location_search" 
+    type="text" 
+    class="absolute left-[195px] form-input !w-[590px] !h-[32px] pl-[10px] pr-[35px] outline-none" 
+    placeholder="Search..."
+>
+
+<button
+    class="outline-btn w-[100px] h-[32px] mt-[5px] ml-[10px] mr-[5px] text-[12px]"
+    style="border-radius: 6px; border: 1px solid #ccc;"
+    onclick="resetMap('28.01888', '-82.11469')"
+>
+    Search
+</button>
+</div>

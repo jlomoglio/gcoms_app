@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/regions.css') }}">
+{% endblock additional_css %}
+
+
+{% block module_container %}
+<!-- REGIONS CONTAINER -->
+<div x-data="xdataRegionsView()">
+	<!-- REGIONS -->
+	<div id="regions-container">
+
+		<!-- Page Header -->
+		<div id="titlebar"
+			class="w-full flex flex-row p-[10px] bg-[#fff] text-[#5a5a5a] select-none border border-b-[#ccc]">
+			<!-- Title -->
+			<div class="page-title mr-[100px]">
+				<i class="fa-solid fa-earth-americas mr-[5px]"></i> Global Regions
+			</div>
+			<!-- End Title -->
+
+			<!-- Search Bar -->
+			{% include "_searchbar.html" %}
+			<!-- End Search Bar -->
+
+			<!-- Button Bar -->
+			{% include "_button_bar.html" %}
+			<!-- End Button Bar -->
+		</div>
+		<!-- End Page Header -->
+
+
+		<!-- Regions Map -->
+		<div id="regions-map" class="top-0 left-0 mr-[0px] bottom-0 !z-[0]"></div>
+		<input type="hidden" id="regions_vals" value="{{ regions | safe }}">
+
+
+		<!-- Regions List -->-
+		<div id="region-list"
+			class="w-[272px] absolute top-[0px] right-0 bottom-0 bg-[#F0F0F0] border border-b-[#ccc]"
+			style="z-index: 10 !important; box-shadow: inset 10px 0px 10px -10px rgba(0, 0, 0, 0.45); overflow-x: none !important;">
+
+			<div id="region-list-header" class="h-[42px] p-[5px] border border-b-[#ccc]">
+				<!-- Filter Icon -->
+				<div class="w-[36px] h-[32px] p-[6px] pl-[7px] flex text-center ml-[5px] bg-white"
+					style="border-radius: 6px; border: 1px solid #ccc; cursor: pointer;"
+					@click="filterDropdownOpen=!filterDropdownOpen">
+					<i class="fa-solid fa-filter text-[20px]"></i>
+				</div>
+				<!-- Add regions Button -->
+				<a 
+					id="add-region-btn"
+					class="outline-btn w-[100px] ml-[10px] mr-[10px] mb-[10px] text-[12px] p-[6px] pl-[15px] absolute top-[5px] right-0 bg-white"
+					style="border-radius: 6px; border: 1px solid #ccc;"
+					href="{{ url_for('regions.add_region') }}">
+					Add Region
+				</a>
+			</div>
+
+			<div class="flex flex-col w-[268px] pb-[45px] h-full">
+				<div id="regions-list-scroller" class="flex flex-col mt-[0px] h-full w-[272px]"
+					style="overflow-y: scroll; overflow-x: none !important; user-select: none;"
+					hx-get="/regions/cards" hx-trigger="load" hx-swap="innerHTML" hx-target="this">
+					<!-- Region cards load here -->
+				</div>
+			</div>
+		</div>
+		<!-- End Regions List -->
+
+
+		<!-- Filter Dropdown -->
+		<div class="w-[265px] h-[130px] fixed top-[83px] right-0 bg-white border border-b-[#ccc] shadow-lg !z-[2200] flex flex-col"
+			@click.outside="filterDropdownOpen=false" x-show="filterDropdownOpen">
+			<div class="menu-item flex flex-row w-full h-[32px] p-[8px] select-none cursor-pointer hover:bg-[#d2d2d2] text-[12px]"
+				@click="locationTypeDropdownOpen=false">
+				<img width="18" height="18" class="mr-[8px]"
+					src="https://img.icons8.com/fluency-systems-filled/18/0000ff/enterprise-resource-planning.png"
+					alt="manufacturing" />
+				Manufacturing
+			</div>
+			<div class="menu-item flex flex-row w-full h-[32px] p-[8px] select-none cursor-pointer hover:bg-[#d2d2d2] text-[12px]"
+				@click="locationTypeDropdownOpen=false">
+				<img width="18" height="18" class="mr-[8px]"
+					src="https://img.icons8.com/fluency/18/008000/parsley.png" alt="farming" />
+				Farming
+			</div>
+			<div class="menu-item flex flex-row w-full h-[32px] p-[8px] select-none cursor-pointer hover:bg-[#d2d2d2] text-[12px]"
+				@click="locationTypeDropdownOpen=false">
+				<img width="18" height="18" class="mr-[8px]"
+					src="https://img.icons8.com/fluency-systems-filled/18/ff0000/electricity.png"
+					alt="energy" />
+				Utilities
+			</div>
+			<div class="menu-item flex flex-row w-full h-[32px] p-[8px] select-none cursor-pointer hover:bg-[#d2d2d2] text-[12px]"
+				@click="continentDropdownOpen=false">
+				<img width="18" class="mr-[8px]" height="18"
+					src="https://img.icons8.com/fluency-systems-filled/18/d507f5/company.png" alt="office" />
+				Offices
+			</div>
+		</div>
+		<!-- End Filter Dropdown -->
+	</div>
+</div>
+<!-- END REGIONS CONTAINER -->
+{% endblock module_container %}
+
+{% block additional_js %}
+<script src="{{ url_for('static', filename='js/regions.js') }}" defer></script>
+{% endblock %}

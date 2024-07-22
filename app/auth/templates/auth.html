@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block additional_css %}
+	<link href="../../auth/static/css/auth.css" rel="stylesheet">
+{% endblock additional_css %}
+
+
+{% block auth_container %}
+        <div class="w-full h-full">
+            <div id="login-container" class="flex flex-col items-center mt-[100px]">
+			<!-- App Title -->
+			<div class="app-title">
+				<img src="../../auth/static/img/GCOMS_LOGO.png" alt="logo" class="h-[160px] mr-[-25px] mt-[10px]" />
+				<div class="text-white text-[100px] mr-[35px]">GCOMS</div>
+			</div>
+			<div class="app-sub-title text-[18px] mb-[5px] mt-[-18px]">Global Construction and Operations Management System</div>
+			<!-- End App Title -->
+
+			<!-- Flask Flash Messages -->
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					<div id="error-txt" class="app-sub-title error-txt mb-[15px]">
+						{% for category, message in messages %}
+							{% if category == 'error' %}
+								<p class="bg-[transparent] text-[red] p-[10px]">{{ message }}</p>
+							{% endif %}
+						{% endfor %}
+					</div>
+				{% endif %}
+			{% endwith %}
+			<!-- End Flask Flash Messages -->
+
+                	<!-- Login Form -->
+			<form id="userloginForm" method="POST" class="w-[600px] h-[500px] mt-[20px]" action="/" novalidate="novalidate">
+				{{ form.csrf_token }}
+
+				<!-- Email -->
+				<div class="form-group mt-[10px]">
+					{{ form.email.label(class_="mb-[5px] !text-[#fff] !text-[13px] font-[500] ml-[50px]") }}
+					{% if form.email.data %}
+						{{ form.email(id="email-input", class_="input", placeholder="Enter you email address", value=form.email.data, novalidate=True) }}
+					{% else %}
+						{{ form.email(id="email-input", class_="input", placeholder="Enter you email address", value='', novalidate=True) }}
+					{% endif %}
+				</div>
+
+				<!-- Password -->
+				<div class="form-group mt-[10px]">
+					{{ form.password.label(class_="mb-[5px] !text-[#fff] !text-[13px] font-[500] ml-[50px]") }}
+					{% if form.password.data %}
+						{{ form.password(id="password-input", class_="input", placeholder="Enter your password", value=form.password.data, novalidate=True) }}
+					{% else %}
+						{{ form.password(id="password-input", class_="input", placeholder="Enter your password", novalidate=True) }}
+					{% endif %}
+				</div>
+
+				<!-- Login Button -->
+				<div class="button-wrapper">
+					<button id="login-button" class="btn-login btn w-[600px]" type="submit">Login</button>
+				</div>
+
+				<div class="text-[14px] text-white flex flex-row w-full h-[50px] mt-[50px] justify-center">
+					© 2024 GCOMS. All Rights Reserved.
+				</div>
+			</form>
+			</div>
+            </div>
+	</div>
+	<!-- Login Renderer -->
+{% endblock auth_container %}
+
+
+
+		
+
