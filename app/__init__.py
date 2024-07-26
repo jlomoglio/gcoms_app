@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from config import Config
 from os import path
 from flask_login import LoginManager
+from flask import render_template
 
 # Database variables
 db = SQLAlchemy()
@@ -49,6 +50,16 @@ def create_app(config_class=Config):
     def load_user(id):
         return User.query.get(int(id))
 
+    # Invalid URL
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
+
+    # Internal Server Error
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('500.html'), 500
+
 
     # Return the app ####################################
     return app
@@ -64,5 +75,6 @@ def register_blueprints(app):
     app.register_blueprint(regions_bp)
 
     return app
+
 
 

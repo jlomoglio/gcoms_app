@@ -45,7 +45,7 @@ def add_region():
 
 
         """ Validate form data """
-        #regions = Region.query.filter_by(reg_id=id).first()
+        regions = Region.query.filter_by(reg_name=reg_name).first()
 
         if regions:
             flash('Region already exists', category='error')
@@ -59,26 +59,26 @@ def add_region():
             flash('Region manager phone number must be greater than 4 characters', category='error')
         elif len(reg_manager_email) < 4:
             flash('Region manager email must be greater than 4 characters', category='error')
-        else:
-            """ Add region to the database """
-            new_region = Region(
-                reg_name=reg_name,
-                reg_description=reg_description,
-                reg_image=reg_image,
-                reg_manager=reg_manager,
-                reg_manager_phone=reg_manager_phone,
-                reg_manager_email=reg_manager_email,
-                reg_lat=reg_lat,
-                reg_lng=reg_lng,
-                reg_continent=reg_continent,
-                reg_country=reg_country,
-                reg_state=reg_state,
-                reg_city = reg_city,
-                reg_type=reg_type
-            )
-            db.session.add(new_region)
-            db.session.commit()
-            flash('Region was added successfully', category='success')
+
+        """ Add region to the database """
+        new_region = Region(
+            reg_name=reg_name,
+            reg_description=reg_description,
+            reg_image=reg_image,
+            reg_manager=reg_manager,
+            reg_manager_phone=reg_manager_phone,
+            reg_manager_email=reg_manager_email,
+            reg_lat=reg_lat,
+            reg_lng=reg_lng,
+            reg_continent=reg_continent,
+            reg_country=reg_country,
+            reg_state=reg_state,
+            reg_city = reg_city,
+            reg_type=reg_type
+        )
+        db.session.add(new_region)
+        db.session.commit()
+        flash('Region was added successfully', category='success')
         return redirect(url_for('regions.regions'))
 
     return render_template('add_region_form.html', user=current_user, form=form)

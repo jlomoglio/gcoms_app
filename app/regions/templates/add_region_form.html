@@ -119,10 +119,10 @@
 		width: 100%;
 		display: flex;
 		flex-direction: row;
-		justify-content: flex-start;
+		justify-content: flex-end;
 		padding: 20px;
 		box-sizing: border-box;
-		margin-top: 70px;
+		margin-top: 10px !important;
 	}
 
 	.cancel-btn,
@@ -163,7 +163,7 @@
 	.btn-solid {
 		width: auto;
 		height: 30px;
-		background-color: #0052a9;
+		background-color: #3282b8;
 		color: #ffffff;
 		border: none;
 		border-radius: 4px;
@@ -206,6 +206,34 @@
 	.zindex {
 		z-index: 1000;
 	}
+
+	.success-snackbar-bubble {
+		position: absolute;
+		top: 72px;
+		left: 515px;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		z-index: 1001;
+		text-align: center;
+		vertical-align: middle;
+		padding: 5px;
+		padding-top: 3px;
+	}
+
+	.error-snackbar-bubble {
+		position: absolute;
+		top: 82px;
+		left: 515px;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		z-index: 1001;
+		text-align: center;
+		vertical-align: middle;
+		padding: 5px;
+		padding-top: 3px;
+	}
 </style>
 {% endblock additional_css %}
 
@@ -216,11 +244,11 @@
 <div id="add-region-form-wrapper" class="bg-[white]">
 	<!-- Form Header & Close Button -->
 	<div id="form-header" class="h-[42px]" style="background-color: hsla(221, 100%, 62%, 0.226);">
-		<div class="p-[8px] pt-[11px] !text-[16px] text-[#5a5a5a] font-[800] h-full ml-[10px]">Add Region
+		<div class="p-[8px] pt-[11px] !text-[16px] text-[#276690] font-[800] h-full ml-[10px]">Add Region
 		</div>
 		<a href="{{ url_for('regions.regions') }}">
 			<i
-				class="fa-solid fa-xmark absolute top-[10px] right-[15px] text-[20px] text-[#5a5a5a] cursor-pointer rotateImg"></i>
+				class="fa-solid fa-xmark absolute top-[10px] right-[15px] text-[20px] text-[#276690] cursor-pointer rotateImg"></i>
 		</a>
 	</div>
 
@@ -230,7 +258,7 @@
 	</div>
 
 	<!-- Region Add Form -->
-	<form id="add-region-form" action="/add_region" method="POST" novalidate>
+	<form id="add-region-form" action="/add_region" method="POST" enctype="multipart/form-data" novalidate>
 		{{ form.csrf_token }}
 
 		<div id="form-columns">
@@ -354,8 +382,10 @@
 				</div>
 
 				<!-- LAT & LNG -->
-				<input type="hidden" id="reg-lat" name="reg_lat" value="">
-				<input type="hidden" id="reg-lng" id="reg_lng">
+				 {{ form.reg_lat() }}
+				 {{ form.reg_lng() }}
+				<!-- <input type="hidden" id="reg-lat" name="reg_lat" value="">
+				<input type="hidden" id="reg-lng" id="reg_lng"> -->
 			</div>
 
 			<!-- Right Column -->
@@ -364,14 +394,11 @@
 				<div class="form-group flex flex-col">
 					<!-- Fileds -->
 					{% if form.reg_type.errors %}
-					{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red]
-					font-[500]") }}
-					{{ form.reg_type(class_="border border-[red] w-[350px] focus:outline-none pl-[10px]
-					p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+						{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red] font-[500]") }}
+						{{ form.reg_type(class_="border border-[red] w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
 					{% else %}
-					{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_type(class_="border border-[#ccc] w-[350px] focus:outline-none pl-[10px]
-					p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+						{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_type(class_="border border-[#ccc] w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
 					{% endif %}
 
 					<!-- Error Message -->
@@ -473,20 +500,17 @@
 					</div>
 				</div>
 
-				{{ form.reg_lat() }}
-				{{ form.reg_lng() }}
+				{{ form.reg_lat(id='reg_lat') }}
+				{{ form.reg_lng(id='reg_lng') }}
 			</div>
 		</div>
 
+		<div class="flex flex-row w-[800px] h-[1px] border border-b-[#ccc] mt-[80px] ml-[15px]"></div>
+
 		<!-- Submit Button -->
 		<div id="buttons-container">
-			<button onclick="window.location.href='/regions'" class="btn-outline">
-				Cancel
-			</button>
-			<!-- <button onclick="submitForm()" class="btn-solid ml-[15px]">
-				Add Region
-			</button> -->
-			{{ form.reg_submit(class_="border border-[#ccc] w-[100px] focus:outline-none ml-[15px] pl-[10px] btn-outline") }}
+			<button onclick="window.location.href='/regions'" class="btn-outline">Cancel</button>
+			{{ form.reg_submit(class_="border border-[#ccc] w-[100px] focus:outline-none ml-[15px] mr-[60px] pl-[10px] btn-solid") }}
 		</div>
 	</form>
 
@@ -501,14 +525,54 @@
 {% block additional_js %}
 <script>
 	/*******************************************************************************************************
+	 * VALIDATE FORM
+	 * ****************************************************************************************************/
+	 document.getElementById("add-region-form").addEventListener("submit", function(e) { 
+			var region_name = document.getElementById("reg_name")
+			var region_description = document.getElementById("reg_description")
+			var region_continent = document.getElementById("reg_continent")
+			var region_country = document.getElementById("reg_country")
+			var region_state = document.getElementById("reg_state")
+			var region_city = document.getElementById("reg_city")
+			var region_type = document.getElementById("reg_type")
+			var region_manager = document.getElementById("reg_manager")
+			var region_manager_phone = document.getElementById("reg_manager_phone")
+			var region_manager_email = document.getElementById("reg_manager_email")
+			var region_image = document.getElementById("reg_image")
+
+			if (
+				region_name.value == "" ||
+				region_description.value == "" ||
+				region_continent.value == "" ||
+				region_country.value == "" ||
+				region_state.value == "" ||
+				region_city.value == "" ||
+				region_type.value == "" ||
+				region_manager.value == "" ||
+				region_manager_phone.value == "" ||
+				region_manager_email.value == "" ||
+				region_image.value == ""
+				
+				) {
+					e.preventDefault()
+					return false
+			}
+	})
+	 /*******************************************************************************************************
+	 * END VALIDATE FORM
+	 * ****************************************************************************************************/
+
+
+
+	/*******************************************************************************************************
 	 * REGIONS COORDS
 	 * ****************************************************************************************************/
 	function getCoords() {
 		//var address = $("#region_address").val()
 		var stateCodeEleVal = document.getElementById("reg_state").value
 		var cityEleVal = document.getElementById("reg_city").value
-		var latEleVal = document.getElementById("reg-lat").value
-		var lngEleVal = document.getElementById("reg-lng").value
+		var latEleVal = document.getElementById("reg_lat").value
+		var lngEleVal = document.getElementById("reg_lng").value
 
 		var fullAddress = cityEleVal + ', ' + stateCodeEleVal
 
@@ -529,8 +593,8 @@
 			
 			result.items.forEach((item) => {
 				if (item.address.city == cityEleVal  || item.address.district == cityEleVal && item.address.state_code == stateCodeEleVal) {
-					$("#reg-lat").val(item.position.lat)
-					$("#reg-lng").val(item.position.lng)
+					$("#reg_lat").val(item.position.lat)
+					$("#reg_lng").val(item.position.lng)
 				}
 				else {
 					// this may be due to some cities actual being a distric in the API
