@@ -56,11 +56,192 @@
 	</head>
 
 	<body x-cloak>
-        <!-- TOP APP BAR -->
+		<!-- Flask Flash Snackbar Messages -->
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages%}
+				{% for category, message in messages %}
+					<!-- SUCCESS SNACKBAR -->
+					{% if category == 'success' %}
+						<div id="success-snackbar" class="relative z-[2000] mt-[60px]">
+							<div 
+								style="
+									border-radius: 20px;
+									background-image: url(../static/img/success_snackbar_background.png);
+									background-size: cover;
+									background-repeat: no-repeat;
+									background-position: left bottom;
+									max-width: fit-content;
+									margin-left: auto;
+									margin-right: auto;
+								" 
+								class="
+									flex 
+									flex-row 
+									p-[12px]
+									pt-[18px]
+									pb-[22px]	
+									w-[360px] 
+									h-[auto] 
+									border 
+									border-[#47b618] 
+									shadow-xl
+									relative
+							">
+								<div class="success-snackbar-bubble absolute">
+									<i class="fa-solid fa-thumbs-up text-[28px] text-[#1e4634] mt-[3px] z-[2000]"></i>
+								</div>
+
+								<div class="flex flex-col pt-[10px] ml-[60px]">
+									<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Success!</span>
+									<span class="text-[#fff] text-[16px] pt-0 leading-none">The region has been added successfully.</span>
+								</div>
+								<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer" onclick="document.getElementById('success-snackbar').style.display = 'none'"></i>
+							</div>
+						</div>
+						<script>
+							setTimeout(function() {
+								document.getElementById('success-snackbar').style.display = 'none'
+							}, 5000)
+						</script>
+					{% endif %}
+
+					<!-- ERROR SNACKBAR -->
+					{% if category == 'error' %}
+					<div id="error-snackbar" class="relative z-[2000] mt-[60px]">
+						<div class="error-snackbar-bubble">
+							<i class="fa-solid fa-triangle-exclamation text-[28px] text-[#770212] !mt-[-3px]"></i>
+						</div>
+						<div 
+							style="
+								border-radius: 20px;
+								background-image: url(../static/img/error_snackbar_background.png);
+								background-size: cover;
+								background-repeat: no-repeat;
+								background-position: left bottom;
+								max-width: fit-content;
+								margin-left: auto;
+								margin-right: auto;
+							" 
+							class="
+								flex 
+								flex-row 
+								p-[12px]
+								pt-[18px]
+								pb-[22px]	
+								w-[360px] 
+								h-[auto] 
+								border 
+								border-[#47b618] 
+								shadow-xl
+								relative
+					">
+							<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
+								<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Error!</span>
+								<span class="text-[#fff] text-[16px] pt-0 leading-none">
+									There was a problem adding the region. There was a problem adding the region.
+								</span>
+							</div>
+							<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
+						</div>
+						<script>
+							setTimeout(function() {
+								document.getElementById('error-snackbar').style.display = 'none'
+							}, 5000)
+						</script>
+					</div>
+					{% endif %}
+
+					<!-- WARNING SNACKBAR -->
+					{% if category == 'warning' %}
+					<div id="warning-snackbar" class="relative z-[2000] mt-[60px]">
+						<div class="error-snackbar-bubble">
+							<i class="fa-solid fa-triangle-exclamation text-[28px] text-[#fb8c20] !mt-[-3px]"></i>
+						</div>
+						<div 
+							style="
+								border-radius: 20px;
+								background-image: url(../static/img/warning_snackbar_background.png);
+								background-size: cover;
+								background-repeat: no-repeat;
+								background-position: left bottom;
+								max-width: fit-content;
+								margin-left: auto;
+								margin-right: auto;
+							" 
+							class="
+								flex 
+								flex-row 
+								p-[12px]
+								pt-[18px]
+								pb-[22px]	
+								w-[360px] 
+								h-[auto] 
+								border 
+								border-[#47b618] 
+								shadow-xl
+								relative
+						">
+							<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
+								<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Warning!</span>
+								<span class="text-[#fff] text-[16px] pt-0 leading-none">
+									{{ message }}
+								</span>
+							</div>
+							<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
+						</div>
+					</div>
+					{% endif %}
+
+					<!-- INFO SNACKBAR -->
+					{% if category == 'info' %}
+					<div id="info-snackbar" class="relative z-[2000] mt-[60px]">
+						<div class="error-snackbar-bubble">
+							<i class="fa-solid fa-circle-info text-[28px] text-[#276690] !mt-[-3px]"></i>
+						</div>
+						<div 
+							style="
+								border-radius: 20px;
+								background-image: url(../static/img/info_snackbar_background.png);
+								background-size: cover;
+								background-repeat: no-repeat;
+								background-position: left bottom;
+								max-width: fit-content;
+								margin-left: auto;
+								margin-right: auto;
+							" 
+							class="
+								flex 
+								flex-row 
+								p-[12px]
+								pt-[18px]
+								pb-[22px]	
+								w-[360px] 
+								h-[auto] 
+								border 
+								border-[#47b618] 
+								shadow-xl
+								relative
+						">
+							<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
+								<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Information!</span>
+								<span class="text-[#fff] text-[16px] pt-0 leading-none">
+									{{ message }}
+								</span>
+							</div>
+							<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
+						</div>
+					</div>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+		<!-- End Flask Flash Messages -->
+
+		<!-- TOP APP BAR -->
 		{% if user.is_authenticated %}
 			{% include '_top_app_bar.html' %}
 		{% endif %}
-		<!-- END TOP APP BAR -->-
+		<!-- END TOP APP BAR -->
 
 
 		<!-- LEFT TOOLBAR -->
@@ -73,240 +254,13 @@
 		<!-- MODULE CONTAINER -->
 		{% if user.is_authenticated %}
 			<div id="module-container" class="fixed top-[40px] right-0 bottom-0 left-[184px]">
-				<!-- Flask Flash Snackbar Messages -->
-				{% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-							<div class="success-snackbar-bubble">
-								<i class="fa-solid fa-thumbs-up text-[28px] text-[#1e4634] mt-[3px]"></i>
-							</div>
-							<div 
-								style="
-									border-radius: 20px;
-									background-image: url(../static/img/success_snackbar_background.png);
-									background-size: cover;
-									background-repeat: no-repeat;
-									background-position: left bottom;
-								" 
-								class="
-									flex 
-									flex-row 
-									p-[12px]
-									pt-[18px]
-									pb-[22px]	
-									absolute 
-									top-[60px] 
-									left-[500px] 
-									w-[360px] 
-									h-[auto] 
-									!z-[1000] 
-									shadow-xl
-									pl-[50px]
-							">
-								{% for category, message in messages %}
-									<!-- Success -->
-									{% if category == 'success' %}
-										<div class="flex flex-col pt-[10px] ml-[30px]">
-											<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Success!</span>
-											<span class="text-[#fff] text-[16px] pt-0 leading-none">{{ message }}</span>
-										</div>
-										<i id="closeTaskbar('success')" class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-									{% endif %}
-
-									<!-- Error -->
-									{% if category == 'error' %}
-										<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
-											<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Error!</span>
-											<span class="text-[#fff] text-[16px] pt-0 leading-none">{{ message }}</span>
-										</div>
-										<i  id="closeTaskbar('error')"class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-									{% endif %}
-
-									<!-- Warning -->
-									{% if category == 'warning' %}
-										<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
-											<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Warning!</span>
-											<span class="text-[#fff] text-[16px] pt-0 leading-none">{{ message }}</span>
-										</div>
-										<i id="closeTaskbar('warning')" class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-									{% endif %}
-
-									<!-- Information / Help -->
-									{% if category == 'info' %}
-										<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
-											<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Information.</span>
-											<span class="text-[#fff] text-[16px] pt-0 leading-none">{{ message }}</span>
-										</div>
-										<i id="closeTaskbar('info')" class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-									{% endif %}
-								{% endfor %}
-							</div>
-					{% endif %}
-				{% endwith %}
-				<!-- End Flask Flash Messages -->
-
 				<!-- Flask Module Slot  -->
 				{% block module_container %}{% endblock %}
 				<!-- End Flask Module Slot -->
 			</div>
-
-			<!-- SUCCESS SNACKBAR -->
-			<div id="success-snackbar" class="hidden">
-				<div class="success-snackbar-bubble">
-					<i class="fa-solid fa-thumbs-up text-[28px] text-[#1e4634] mt-[3px]"></i>
-				</div>
-				<div 
-					style="
-						border-radius: 20px;
-						background-image: url(../static/img/success_snackbar_background.png);
-						background-size: cover;
-						background-repeat: no-repeat;
-						background-position: left bottom;
-					" 
-					class="
-						flex 
-						flex-row 
-						p-[12px]
-						pt-[18px]
-						pb-[22px]	
-						absolute 
-						top-[60px] 
-						left-[500px] 
-						w-[360px] 
-						h-[auto] 
-						!z-[1000] 
-						border 
-						border-[#47b618] 
-						shadow-xl
-						pl-[50px]
-				">
-					<div class="flex flex-col pt-[10px] ml-[30px]">
-						<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Success!</span>
-						<span class="text-[#fff] text-[16px] pt-0 leading-none">The region has been added successfully.</span>
-					</div>
-					<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-				</div>
-			</div>
-
-			<!-- ERROR SNACKBAR -->
-			<div id="error-snackbar" class="hidden">
-				<div class="error-snackbar-bubble">
-					<i class="fa-solid fa-triangle-exclamation text-[28px] text-[#770212] !mt-[-3px]"></i>
-				</div>
-				<div 
-					style="
-						border-radius: 20px;
-						background-image: url(../static/img/error_snackbar_background.png);
-						background-size: cover;
-						background-repeat: no-repeat;
-						background-position: left bottom;
-					" 
-					class="
-						flex 
-						flex-row 
-						p-[12px]
-						pt-[18px]
-						pb-[18px]	
-						absolute 
-						top-[60px] 
-						left-[500px] 
-						w-[380px]
-						h-[auto] 
-						!z-[1000] 
-						border 
-						border-[#47b618] 
-						shadow-xl
-						pl-[50px]
-				">
-					<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
-						<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Error!</span>
-						<span class="text-[#fff] text-[16px] pt-0 leading-none">
-							There was a problem adding the region. There was a problem adding the region.
-						</span>
-					</div>
-					<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-				</div>
-			</div>
-
-			<!-- WARNING SNACKBAR -->
-			<div id="warning-snackbar" class="hidden">
-				<div class="error-snackbar-bubble">
-					<i class="fa-solid fa-triangle-exclamation text-[28px] text-[#fb8c20] !mt-[-3px]"></i>
-				</div>
-				<div 
-					style="
-						border-radius: 20px;
-						background-image: url(../static/img/warning_snackbar_background.png);
-						background-size: cover;
-						background-repeat: no-repeat;
-						background-position: left bottom;
-					" 
-					class="
-						flex 
-						flex-row 
-						p-[12px]
-						pt-[18px]
-						pb-[18px]	
-						absolute 
-						top-[60px] 
-						left-[500px] 
-						w-[380px]
-						h-[auto] 
-						!z-[1000] 
-						border 
-						shadow-xl
-						pl-[50px]
-				">
-					<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
-						<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Warning!</span>
-						<span class="text-[#fff] text-[16px] pt-0 leading-none">
-							There was a problem adding the region. There was a problem adding the region.
-						</span>
-					</div>
-					<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-				</div>
-			</div>
-
-			<!-- INFO SNACKBAR -->
-			<div id="info-snackbar" class="hidden">
-				<div class="error-snackbar-bubble">
-					<i class="fa-solid fa-circle-info text-[28px] text-[#276690] !mt-[-3px]"></i>
-				</div>
-				<div 
-					style="
-						border-radius: 20px;
-						background-image: url(../static/img/info_snackbar_background.png);
-						background-size: cover;
-						background-repeat: no-repeat;
-						background-position: left bottom;
-					" 
-					class="
-						flex 
-						flex-row 
-						p-[12px]
-						pt-[18px]
-						pb-[18px]	
-						absolute 
-						top-[60px] 
-						left-[500px] 
-						w-[380px]
-						h-[auto] 
-						!z-[1000] 
-						border 
-						shadow-xl
-						pl-[50px]
-				">
-					<div class="flex flex-col pt-[10px] ml-[40px] mr-[40px]">
-						<span class="text-[#fff] text-[20px] mt-[-15px] mr-[15px] font-[600]">Information!</span>
-						<span class="text-[#fff] text-[16px] pt-0 leading-none">
-							There was a problem adding the region. There was a problem adding the region.
-						</span>
-					</div>
-					<i class="fa-solid fa-xmark text-white text-[16px] absolute right-[20px] cursor-pointer"></i>
-				</div>
-			</div>
 		{% else %}
 			<!-- Flask Module Slot  -->
-            {% block auth_container %}{% endblock %}
+		{% block auth_container %}{% endblock %}
 			<!-- End Flask Module Slot -->
 		{% endif %}
 		<!-- END MODULE CONTAINER -->
@@ -330,7 +284,17 @@
 		<!-- END AUTO LOGOUT JS FUNCTIONS -->
 
 		<!-- Additional JS Code Slot -->
-		{% block additional_js %}{% endblock additional_js %}
+		{% block additional_js %}
+		<script>
+			const successSnackbar = document.getElementById('success-snackbar')
+			if (successSnackbar) {
+				console.log('Success Snackbar Found')
+			}
+			else {
+				console.log('Success Snackbar Not Found')
+			}
+		</script>
+		{% endblock additional_js %}
 		<!-- End Additional JS Code Slot -->
 	</body>
 </html>

@@ -206,34 +206,6 @@
 	.zindex {
 		z-index: 1000;
 	}
-
-	.success-snackbar-bubble {
-		position: absolute;
-		top: 72px;
-		left: 515px;
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		z-index: 1001;
-		text-align: center;
-		vertical-align: middle;
-		padding: 5px;
-		padding-top: 3px;
-	}
-
-	.error-snackbar-bubble {
-		position: absolute;
-		top: 82px;
-		left: 515px;
-		width: 32px;
-		height: 32px;
-		border-radius: 50%;
-		z-index: 1001;
-		text-align: center;
-		vertical-align: middle;
-		padding: 5px;
-		padding-top: 3px;
-	}
 </style>
 {% endblock additional_css %}
 
@@ -880,11 +852,8 @@
 		$pic = $('<img id="photo" class="!w-[350px] !h-[180px] rounded border absolute top-0 left-0 right-0 bottom-0"/>');
 
 		$("#image").change(function (e) {
-			//console.log("Image Selected: " + $("#image").val())
+			// Strip Fake Path from filename
 			const imgFilename = e.target.files[0].name;
-			console.log("Image Selected: " + imgFilename)
-			//var img_file = $("#image").val()
-			//img_file.replace("C:\\fakepath\\", "");
 			$("#reg_image").val(imgFilename)
 
 			var $lbl = $("#photo-box");
