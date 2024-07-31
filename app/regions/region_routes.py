@@ -28,7 +28,7 @@ def add_region():
 
     # Logic for adding a new region
     if request.method == 'POST':
-        """ Get form data """
+        """ Assign form data to vars """
         reg_name = request.form['reg_name']
         reg_description = request.form['reg_description']
         reg_image = request.form['reg_image']

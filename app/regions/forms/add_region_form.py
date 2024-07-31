@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, HiddenField, SelectField, FileField, EmailField, ValidationError
 from wtforms.validators import InputRequired, Email
 from wtforms_alchemy import PhoneNumberField
-import phonenumbers
 
 
 def validate_phone(form, field):
@@ -12,11 +11,11 @@ def validate_phone(form, field):
 class AddRegionForm(FlaskForm):
     reg_name = StringField('Region Name', validators=[InputRequired()])
     reg_description= TextAreaField('Description', validators=[InputRequired()])
-    reg_image = FileField('Image', validators=[InputRequired()])
+    reg_image = StringField('Image', validators=[InputRequired()])
     reg_manager = StringField('Manager', validators=[InputRequired()])
     reg_manager_phone = PhoneNumberField('Manager Phone', validators=[InputRequired(), validate_phone])
-
     reg_manager_email = EmailField('Manager Email', validators=[InputRequired(), Email()])
+
     reg_lat = HiddenField('Latitude')
     reg_lng = HiddenField('Longitude')
     reg_continent = SelectField(

@@ -483,19 +483,18 @@
 					Region Image
 				</label>
 				<div class="form-group mt-[0px] flex flex-col">
-					<div id="photo-box"
-						class="w-[350px] rounded p-[0px] !h-[180px] bg-[#fff] flex flex-col border border-[#ccc] relative">
+					<div id="photo-box" class="w-[350px] rounded p-[0px] !h-[180px] bg-[#fff] flex flex-col border border-[#ccc] relative">
 						{{ form.reg_image(class_="hidden") }}
+						<input type="file" id="image" name="image" class="hidden">
 						<img id="photo" class="w-[100%] h-[180px] rounded border" />
 					</div>
 					<div class="flex flex-row mt-[10px] relative w-[350px]">
-						<div class="btn-outline" onclick="document.getElementById('reg_image').click()">
+						<div class="btn-outline" onclick="document.getElementById('image').click()">
 							Select a Photo
 						</div>
 						<div
 							class="border border-[#ccc] text-[12px] p-[5px] pl-[10px] pr-[10px] rounded absolute left-[316px]">
-							<i id="trashcan"
-								class="fa-solid fa-trash cursor-pointer mt-[2px] text-[#5a5a5a]"></i>
+							<i id="trashcan" class="fa-solid fa-trash cursor-pointer mt-[2px] text-[#5a5a5a]"></i>
 						</div>
 					</div>
 				</div>
@@ -524,43 +523,7 @@
 
 {% block additional_js %}
 <script>
-	/*******************************************************************************************************
-	 * VALIDATE FORM
-	 * ****************************************************************************************************/
-	 document.getElementById("add-region-form").addEventListener("submit", function(e) { 
-			var region_name = document.getElementById("reg_name")
-			var region_description = document.getElementById("reg_description")
-			var region_continent = document.getElementById("reg_continent")
-			var region_country = document.getElementById("reg_country")
-			var region_state = document.getElementById("reg_state")
-			var region_city = document.getElementById("reg_city")
-			var region_type = document.getElementById("reg_type")
-			var region_manager = document.getElementById("reg_manager")
-			var region_manager_phone = document.getElementById("reg_manager_phone")
-			var region_manager_email = document.getElementById("reg_manager_email")
-			var region_image = document.getElementById("reg_image")
 
-			if (
-				region_name.value == "" ||
-				region_description.value == "" ||
-				region_continent.value == "" ||
-				region_country.value == "" ||
-				region_state.value == "" ||
-				region_city.value == "" ||
-				region_type.value == "" ||
-				region_manager.value == "" ||
-				region_manager_phone.value == "" ||
-				region_manager_email.value == "" ||
-				region_image.value == ""
-				
-				) {
-					e.preventDefault()
-					return false
-			}
-	})
-	 /*******************************************************************************************************
-	 * END VALIDATE FORM
-	 * ****************************************************************************************************/
 
 
 
@@ -916,7 +879,15 @@
 	$(document).ready(function () {
 		$pic = $('<img id="photo" class="!w-[350px] !h-[180px] rounded border absolute top-0 left-0 right-0 bottom-0"/>');
 
-		$("#reg_image").change(function () {
+		$("#image").change(function (e) {
+			//console.log("Image Selected: " + $("#image").val())
+			const imgFilename = e.target.files[0].name;
+			console.log("Image Selected: " + imgFilename)
+			//var img_file = $("#image").val()
+			//img_file.replace("C:\\fakepath\\", "");
+			$("#reg_image").val(imgFilename)
+
+			var $lbl = $("#photo-box");
 			var files = !!this.files ? this.files : [];
 			if (!files.length || !window.FileReader) {
 				$("#photo").remove();
@@ -937,6 +908,7 @@
 			$("#reg_image").val("");
 		});
 	})
+
 	/*******************************************************************************************************
 	 * END REGIONS FORM FIELDS
 	 * ****************************************************************************************************/
