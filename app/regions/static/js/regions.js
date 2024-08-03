@@ -15,7 +15,6 @@ $(window).on("resize", function () { $("#regions-map").height($(window).height()
 console.log("Regions JS has been loaded ----------------->")
 
 function loadRoadMap() {
-
     //console.log("regions_vals --> " + document.getElementById("regions_vals").value)
     
     /** MAP MARKERS */
@@ -308,9 +307,6 @@ function getTimezone () {
 /*******************************************************************************************************
  * END regions TIME ZONE
  * ****************************************************************************************************/
-
-
-
 
 
 

@@ -5,12 +5,42 @@ from .forms.add_region_form import AddRegionForm
 from .region_models import Region, City
 from app import db
 
-@bp.route('/regions')
+@bp.route('/regions', methods=['GET', 'POST'])
 @login_required
 def regions():
-    # Logic for getting regions
+    # Grab all regions from the database
+    regions = Region.query.all()
+    return render_template('regions.html', user=current_user, regions=regions)
 
-    return render_template('regions.html', user=current_user)
+
+@bp.route('/regions/map', methods=['GET'])
+@login_required
+def get_regions_map():
+    # Query DB for all regions
+    regions = Region.query.all()
+
+    # Create a list of regions
+    regions_list = []
+
+    # Loop through the regions and append the data to the list
+    for region in regions:
+        reg = {
+            'reg_name': region.reg_name,
+            'reg_lat': region.reg_lat,
+            'reg_lng': region.reg_lng
+        }
+        regions_list.append(reg)
+
+    return jsonify(regions) # ---> How do I return this data to the front end?
+
+
+
+@bp.route('/regions/cards')
+@login_required
+def get_region_cards():
+    regions = Region.query.all()
+    return render_template('_region_card.html', regions=regions)
+
 
 
 @bp.route('/get_region/<int:id>', methods=['POST'])
