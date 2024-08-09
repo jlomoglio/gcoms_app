@@ -12,12 +12,6 @@ HOW TO START AND RUN THE APPLICATION:
 2. Run the application by running the command: flask run --host=0.0.0.0 --debug=True
 3. Open the browser and go to the URL: http://localhost:5000/
 
-* May need to do this if above fails
-export FLASK_APP=app
-export FLASK_ENV=development
-flask run --host=0.0.0.0 --debug=True
-
-
 
 FACTORY PATTERN FOLDER STRUCTURE
 This provides the application to be modualr and
