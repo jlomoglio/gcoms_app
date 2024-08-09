@@ -2,11 +2,62 @@
 
 {% block additional_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/regions.css') }}">
+<style>
+#alertModal {
+	display: none;
+	z-index: 1000;
+	position: absolute; 
+  	left: 50px; 
+	right: 300px; 
+	margin-left: auto; 
+	margin-right: auto; 
+	margin-top: 150px;
+	overflow: auto;
+	width:  350px;
+	height: 130px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	padding: 30px;
+	background-image: url(../static/img/info_snackbar_background.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+
+.alert-modal-header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 40px;
+}
+
+.alert-modal-button {
+	position: absolute;
+	bottom: 20px;
+	right: 80px;
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 1px solid #fff;
+	color: #fff !important;
+	cursor: pointer;
+	width: 170px;
+	text-align: center;
+}
+
+.hide {
+	display: none;
+}
+</style>
 {% endblock additional_css %}
 
 
 {% block module_container %}
 <!-- REGIONS CONTAINER -->
+
+
+
 <div x-data="{ filterDropdownOpen: false }">
 	<!-- REGIONS -->
 	<div id="regions-container">
@@ -30,11 +81,27 @@
 		</div>
 		<!-- End Page Header -->
 
+		
 
 		<!-- Regions Map -->
-		<div id="regions-map" class="top-0 left-0 mr-[0px] bottom-0 !z-[0]"></div>
+		<div id="regions-map" class="top-0 left-0 mr-[0px] bottom-0 !z-[0]">
+			<div id="alertModal" class="shadow-lg hide">
+				<div class="alert-modal-body">
+					<span class="text-[14px] text-white font-[600]">
+						To begin, add a region to view on the map.
+					</span>
+					<a 
+						id="alert-modal-button"
+						class="alert-modal-button"
+						href="{{ url_for('regions.add_region') }}"
+					>
+						Add Region
+					</a>
+				</div>
+			</div>
+		</div>
 		<input type="hidden" id="regions_vals" value="{{ regions | safe }}">
-
+		
 
 		<!-- Regions List -->
 		<div id="region-list"
@@ -106,6 +173,18 @@
 
 {% block additional_js %}
 <script>
+	function openAlertModal() {
+		// Get the modal
+		var modal = document.getElementById("alertModal");
+		var titleBar = document.getElementById("button-bar");
+		var regionsList = document.getElementById("region-list");
+
+		modal.style.display = "block";
+		titleBar.style.display = "none";
+		regionsList.style.display = "none";
+	}
+
+
 	/*******************************************************************************************************
 	 * regions MAP
 	 * ****************************************************************************************************/
@@ -117,31 +196,48 @@
 	let regionMap = L.map('regions-map').setView([28.01888, -82.11469], 3); //starting position
 	let bounds = new L.LatLngBounds(new L.LatLng(28.01888, -82.11469), new L.LatLng(61.2, 2.5));
 	let myAPIKey = 'ac2f04a36afe49d2a5b7ea34eab0cead' // https://www.geoapify.com/
+	let myGeoJSONLayer;
 
 	$(window).on("resize", function () { $("#regions-map").height($(window).height()); regionMap.invalidateSize(); }).trigger("resize");
 
 	console.log("Regions JS has been loaded ----------------->")
 
+	function drawStateBoundary(city, state) {
+			url = `https://nominatim.openstreetmap.org/search.php?city=${city}&state=${state}&polygon_geojson=1&format=jsonv2`
+			fetch(url).then(function(response) {
+			return response.json();
+		})
+		.then(function(json) {
+			//geojsonFeature = json[0].geojson;
+			L.geoJSON(geojsonFeature).addTo(map);
+		});
+	}
+
 	function loadRoadMap() {
-		//console.log("regions_vals --> " + document.getElementById("regions_vals").value)
-
-		/** MAP MARKERS */
-		let regionIcon
-		let regions = document.getElementById("regions_vals").value
-
 		const response = fetch('/regions/map')
-			.then(response => response.json())
+			.then(response => {
+				if (!response) {
+					console.error(err.message);
+				}
+
+				return response.json();
+			})
 			.then(data => {
 				/** MAP MARKERS */
 				let regionIcon
 
 				console.log("data --> " + JSON.stringify(data, null, 2))
 
+				if (data.length == 0) {
+					openAlertModal() 
+				}
+
 				for (let i = 0; i < data.length; i++) {
-					let marker = L.marker([data[i].reg_lat, data[i].reg_lng])
-						.bindTooltip(data[i].reg_name, { permanent: true })
+					let marker = L.marker([data[i].lat, data[i].lng])
+						.bindTooltip(data[i].name, { permanent: true })
 						.openTooltip()
 						.addTo(regionMap)
+		
 				}
 
 				/** MAP TILES */
@@ -161,14 +257,11 @@
 					regionMap.panInsideBounds(bounds, { animate: true });
 				});
 			})
-
 	}
-
 	loadRoadMap()
 
 
 	function loadSatMap() {
-
 		/** GET MAP MARKERS DATA */
 		const response = fetch('/regions/map')
 			.then(response => {
@@ -183,8 +276,8 @@
 				let regionIcon
 
 				for (let i = 0; i < data.length; i++) {
-					let marker = L.marker([data[i].reg_lat, data[i].reg_lng])
-						.bindTooltip(data[i].reg_name, { permanent: true })
+					let marker = L.marker([data[i].lat, data[i].lng])
+						.bindTooltip(data[i].name, { permanent: true })
 						.openTooltip()
 						.addTo(regionMap)
 				}
@@ -271,12 +364,11 @@
 				}
 
 				var marker = L.marker(lat, lng, { icon: regionIcon, title: '' })
-				regionMap.flyTo([lat, lng], 7);
+				regionMap.flyTo([lat, lng], 12);
 			})
 	}
 
 	function resetMap(lat, lng) {
-
 		/** GET MAP MARKERS DATA */
 		const response = fetch('/regions/map')
 			.then(response => {
@@ -358,7 +450,7 @@
 		var zip = $("#region_zip").val()
 
 		//var fullAddress = address + ', ' + city + ' ' + state + ' ' + zip
-		var fullAddress = '599 eagles nest, plant city fl 33565'
+		var fullAddress = state
 
 
 		// Instantiate a map and platform object:

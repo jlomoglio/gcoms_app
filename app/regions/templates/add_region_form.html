@@ -12,42 +12,58 @@
 	}
 
 	#add-region-form {
-		width: 900px;
-		height: 500px;
-		position: relative;
+		position: absolute;
+		top: 40px;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		display: flex;
 		flex-direction: column;
 		padding: 0px;
 		box-sizing: border-box;
-		margin-top: -15px;
+	}
+
+	#add-region-form-wrapper {
+		position: absolute;
+		top: 40px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		overflow-y: auto;
 	}
 
 	#form-columns {
-		width: 900px;
-		height: 500px;
-		background-color: rgb(255, 255, 255);
+		position: absolute;
+		top: 20px;
+		left: 0;
+		right: 0;
+		bottom: 0;
 		display: flex;
 		flex-direction: row;
 		box-sizing: border-box;
-		padding-left: 0px;
+		padding-left: 20px;
 	}
 
 
 	#left-col {
-		width: 450px;
-		height: auto;
+		position: absolute;
+		left: 20px;
+		width: 420px !important;
+		top: 0;
+		bottom: 0;
 		display: flex;
 		flex-direction: column;
-		padding: 20px;
 		box-sizing: border-box;
 	}
 
 	#right-col {
-		width: 450px;
-		height: auto;
+		position: absolute;
+		left: 440px;
+		right: 0px;
+		padding-top: 0px;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-		padding: 20px;
 		box-sizing: border-box;
 	}
 
@@ -92,7 +108,7 @@
 	}
 
 	.disabled {
-		background-color: #f0f0f0;
+		background-color: #f4f4f4;
 		color: #5a5a5a;
 		border-radius: 4px;
 		height: 30px !important;
@@ -119,8 +135,9 @@
 		width: 100%;
 		display: flex;
 		flex-direction: row;
-		justify-content: flex-end;
+		justify-content: flex-start;
 		padding: 20px;
+		padding-left: 0px;
 		box-sizing: border-box;
 		margin-top: 10px !important;
 	}
@@ -146,6 +163,18 @@
 	.cancel-btn {
 		background-color: #ccc;
 		color: #5a5a5a;
+	}
+
+	.btn-disabled {
+		width: auto;
+		background-color: #f7f7f7;
+		color: #919191;
+		border-radius: 4px;
+		border:  1px solid #ccc;
+		height: 29px !important;
+		cursor: default !important;
+		font-size: .8em;
+		padding: 4px 12px;
 	}
 
 	.btn-outline {
@@ -179,16 +208,6 @@
 		user-select: none;
 	}
 
-	.continent-menu-item,
-	.country-menu-item {
-		padding-left: 10px !important;
-	}
-
-	.continent-menu-item:hover,
-	.country-menu-item:hover {
-		background-color: #d2d2d2;
-	}
-
 	.rotateImg {
 		cursor: pointer;
 		text-decoration: none;
@@ -206,24 +225,32 @@
 	.zindex {
 		z-index: 1000;
 	}
+
+	#region-map {
+		position: absolute;
+		top: 70px;
+		left: 0;
+		right: 50px;
+		height: 584px !important;
+		border: 1px solid #ccc;
+	}
 </style>
 {% endblock additional_css %}
 
 
 <!-- MODULE CONTAINER -->
 {% block module_container %}
-<!-- Add Region Form -->
-<div id="add-region-form-wrapper" class="bg-[white]">
-	<!-- Form Header & Close Button -->
-	<div id="form-header" class="h-[42px]" style="background-color: hsla(221, 100%, 62%, 0.226);">
-		<div class="p-[8px] pt-[11px] !text-[16px] text-[#276690] font-[800] h-full ml-[10px]">Add Region
-		</div>
-		<a href="{{ url_for('regions.regions') }}">
-			<i
-				class="fa-solid fa-xmark absolute top-[10px] right-[15px] text-[20px] text-[#276690] cursor-pointer rotateImg"></i>
-		</a>
+<!-- Form Header & Close Button -->
+<div id="form-header" class="h-[42px]" style="background-color: hsla(221, 100%, 62%, 0.226);">
+	<div class="p-[8px] pt-[11px] !text-[16px] text-[#276690] font-[800] h-full ml-[10px]">Add Region
 	</div>
-
+	<a href="{{ url_for('regions.regions') }}">
+		<i
+			class="fa-solid fa-xmark absolute top-[10px] right-[15px] text-[20px] text-[#276690] cursor-pointer rotateImg"></i>
+	</a>
+</div>
+<!-- Add Region Form -->
+<div id="add-region-form-wrapper">
 	<!-- Form Instructions -->
 	<div id="form-instructions">
 		Please provide region details below. All fields are required.
@@ -262,120 +289,19 @@
 				<div class="form-group flex flex-col">
 					<!-- Fileds -->
 					{% if form.reg_description.errors %}
-					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red]
-					font-[500]") }}
-					{{ form.reg_description(rows=8, class_="border border-[red] w-[350px] focus:outline-none
-					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
-					{% else %}
-					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]")
+					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red] font-[500]")
 					}}
-					{{ form.reg_description(class_="h-[161px] max-h-[161px] min-h-[161px] border border-[#ccc]
-					w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{{ form.reg_description(rows=8, class_="border border-[red] w-[350px] focus:outline-none pl-[10px]
+					p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% else %}
+					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+					{{ form.reg_description(class_="h-[90px] max-h-[90px] min-h-[90px] border border-[#ccc] w-[350px]
+					focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
 					{% endif %}
 
 					<!-- Error Message -->
 					<ul>
 						{% for error in form.reg_description.errors %}
-						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-
-				<!-- Region Continent -->
-				<div class="form-group flex flex-col">
-					{% if form.reg_continent.errors %}
-					{{ form.reg_continent.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_continent(class_="select border border-[red]") }}
-					{% else %}
-					{{ form.reg_continent.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_continent(class_="select") }}
-					{% endif %}
-
-					<!-- Error Message -->
-					<ul>
-						{% for error in form.reg_continent.errors %}
-						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-
-				<!-- Region Country -->
-				<div class="form-group flex flex-col">
-					{% if form.reg_country.errors %}
-					{{ form.reg_country.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_country(class_="border border-[red]") }}
-					{% else %}
-					{{ form.reg_country.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_country(disabled=True, class_="disabled") }}
-					{% endif %}
-
-					<!-- Error Message -->
-					<ul>
-						{% for error in form.reg_country.errors %}
-						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-
-				<!-- Region state -->
-				<div class="form-group flex flex-col">
-					{% if form.reg_state.errors %}
-					{{ form.reg_state.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_state(class_="border border-[red]") }}
-					{% else %}
-					{{ form.reg_state.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_state(disabled=True, class_="disabled") }}
-					{% endif %}
-
-					<!-- Error Message -->
-					<ul>
-						{% for error in form.reg_state.errors %}
-						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-
-				<!-- Region City -->
-				<div class="form-group flex flex-col">
-					{% if form.reg_city.errors %}
-						{{ form.reg_city.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-						{{ form.reg_city(class_="border border-[red]") }}
-					{% else %}
-						{{ form.reg_city.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-						{{ form.reg_city(disabled=True, class_="disabled zindex") }}
-					{% endif %}
-
-					<!-- Error Message -->
-					<ul>
-						{% for error in form.reg_city.errors %}
-						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-
-				<!-- LAT & LNG -->
-				 {{ form.reg_lat() }}
-				 {{ form.reg_lng() }}
-				<!-- <input type="hidden" id="reg-lat" name="reg_lat" value="">
-				<input type="hidden" id="reg-lng" id="reg_lng"> -->
-			</div>
-
-			<!-- Right Column -->
-			<div id="right-col">
-				<!-- Region Type -->
-				<div class="form-group flex flex-col">
-					<!-- Fileds -->
-					{% if form.reg_type.errors %}
-						{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red] font-[500]") }}
-						{{ form.reg_type(class_="border border-[red] w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
-					{% else %}
-						{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-						{{ form.reg_type(class_="border border-[#ccc] w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
-					{% endif %}
-
-					<!-- Error Message -->
-					<ul>
-						{% for error in form.reg_type.errors %}
 						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
 						{% endfor %}
 					</ul>
@@ -455,7 +381,8 @@
 					Region Image
 				</label>
 				<div class="form-group mt-[0px] flex flex-col">
-					<div id="photo-box" class="w-[350px] rounded p-[0px] !h-[180px] bg-[#fff] flex flex-col border border-[#ccc] relative">
+					<div id="photo-box"
+						class="w-[350px] rounded p-[0px] !h-[180px] bg-[#fff] flex flex-col border border-[#ccc] relative">
 						{{ form.reg_image(class_="hidden") }}
 						<input type="file" id="image" name="image" class="hidden">
 						<img id="photo" class="w-[100%] h-[180px] rounded border" />
@@ -471,21 +398,46 @@
 					</div>
 				</div>
 
+				<!-- LAT & LNG -->
 				{{ form.reg_lat(id='reg_lat') }}
 				{{ form.reg_lng(id='reg_lng') }}
+
+				<!-- Submit Button -->
+				<div id="buttons-container">
+					<button onclick="window.location.href='/regions'" class="btn-outline">Cancel</button>
+					{{ form.reg_submit(class_="border border-[#ccc] w-[100px] focus:outline-none ml-[15px] mr-[60px]
+					pl-[10px] btn-solid") }}
+				</div>
+			</div>
+
+			<!-- Right Column -->
+			<div id="right-col">
+				<!-- Map Filters -->
+				<div class="flex !flex-row gap-[15px]">
+					<!-- Region Continent -->
+					<div class="flex flex-col">
+						{{ form.reg_continent.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_continent(class_="w-[170px]") }}
+					</div>
+					<div class="flex flex-col">
+						{{ form.reg_country.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_country(disabled=True, class_="disabled w-[170px]") }}
+					</div>
+					<div class="flex flex-col">
+						{{ form.reg_state.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_state(disabled=True, class_="disabled w-[170px]") }}
+					</div>
+					<div class="flex flex-col">
+						<div id="reset-button" class="btn-disabled mt-[23px]" onclick="resetAddRegionMap()">Reset Map</div>
+					</div>
+				</div>
+				<div class="flex flex-row ">
+					<!-- Regions Map -->
+					<div id="region-map" class="shadow-lg"></div>
+				</div>
 			</div>
 		</div>
-
-		<div class="flex flex-row w-[800px] h-[1px] border border-b-[#ccc] mt-[80px] ml-[15px]"></div>
-
-		<!-- Submit Button -->
-		<div id="buttons-container">
-			<button onclick="window.location.href='/regions'" class="btn-outline">Cancel</button>
-			{{ form.reg_submit(class_="border border-[#ccc] w-[100px] focus:outline-none ml-[15px] mr-[60px] pl-[10px] btn-solid") }}
-		</div>
 	</form>
-
-	
 </div>
 <!-- End Add Region Form -->
 
@@ -495,54 +447,135 @@
 
 {% block additional_js %}
 <script>
+	/*******************************************************************************************************
+	 * REGION MAP
+	 * ****************************************************************************************************/
+	 let map = L.map('region-map').setView([28.01888, -82.11469], 3); //starting position
+	 let bounds = new L.LatLngBounds(new L.LatLng(28.01888, -82.11469), new L.LatLng(61.2, 2.5));
+	 let myAPIKey = 'ac2f04a36afe49d2a5b7ea34eab0cead' // https://www.geoapify.com/
+
+	 $(window).on("resize", function () { $("#region-map").height($(window).height()); map.invalidateSize(); }).trigger("resize");
+
+	 function loadMap() {
+		/** MAP TILES */
+		//API KEY: c03aea95c948480d8ec40331f8012ff1 || https://www.geoapify.com/geocoding-api
+		L.tileLayer('https://maps.geoapify.com/v1/tile/osm-bright-smooth/{z}/{x}/{y}@2x.png?apiKey=' + myAPIKey, {
+			minZoom: 3,
+			maxZoom: 19.5
+		}).addTo(map);
+
+		var poly = L.polyline([
+			[37, 41],
+			[25, 32]
+		], {
+			color: 'red'
+		}).addTo(map);
+
+		/** MAP POLY LINES */
+		var options = {
+			segmentSize: 250,
+			style: {
+			    default: {
+				  weight: 3,
+				  color: 'blue'
+			    },
+			    hover: {
+				  weight: 6,
+				  color: 'orange'
+			    },
+			    editing: {
+				  weight: 2,
+				  color: 'gray'
+			    }
+			}
+		};
+		  
+		var editor = new L.Edit.PolySegmentEditing(map, poly);
+		  
+		// The segments won't show until the handler is enabled
+		editor.enable();
+		  
+		// After all the work is done
+		editor.disable();
 
 
+		/** MAP BOUNDRY */
+		let southWest = L.latLng(-89.98155760646617, -240);
+		let northEast = L.latLng(89.99346179538875, 240);
+		let bounds = L.latLngBounds(southWest, northEast);
+
+		map.setMaxBounds(bounds);
+		map.on('drag', function () {
+			map.panInsideBounds(bounds, { animate: true });
+		});
+
+		// Get Lat & Lng on Click
+		map.on('click', function(e) {
+			//alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
+			//L.circle([e.latlng.lat,e.latlng.lng], 160934).addTo(map);
+		  });
+	 }
+	 loadMap()
+
+	 function resetAddRegionMap() {
+		map.flyTo([28.01888, -82.11469], 3);
+		resetContinentSelect()
+		resetCountrySelect()
+		resetStateSelect()
+		document.getElementById("reset-button").classList.add("btn-disabled");
+		document.getElementById("reset-button").classList.remove("btn-outline");
+	 }
+	/*******************************************************************************************************
+	 * END REGION MAP
+	 * ****************************************************************************************************/
 
 
 	/*******************************************************************************************************
 	 * REGIONS COORDS
 	 * ****************************************************************************************************/
-	function getCoords() {
-		//var address = $("#region_address").val()
-		var stateCodeEleVal = document.getElementById("reg_state").value
-		var cityEleVal = document.getElementById("reg_city").value
-		var latEleVal = document.getElementById("reg_lat").value
-		var lngEleVal = document.getElementById("reg_lng").value
+	 // Country Coords
+	 function getCountryCoords(country) {
+		var countryLatEleVal = document.getElementById("reg_lat").value
+		var countryLngEleVal = document.getElementById("reg_lng").value
+		var api_key = "1fbc1d9344514e01bee70dac2096ecff"
+		var api_url = `https://api.opencagedata.com/geocode/v1/json?key=${api_key}&q=${country}&pretty=1&no_annotations=1`
 
-		var fullAddress = cityEleVal + ', ' + stateCodeEleVal
+		fetch(api_url)
+			.then(response => response.json())
+			.then(data => {
+				console.log("COUNTRY COORDS: " + JSON.stringify(data, null, 2));
 
-		console.log("STATE CODE (Line 518) ->> " + stateCodeEleVal)
+				// Get the country coords
+				var countryLat = data.results[0].geometry.lat
+				var countryLng = data.results[0].geometry.lng
 
-		// Instantiate a map and platform object:
-		var platform = new H.service.Platform({
-			'apikey': 'VrAphDSRziIUkYqjpF3Q-Oi5QCJu9Uu3niiKGCQZ75E'
-		});
-
-		// Get an instance of the geocoding service:
-		var service = platform.getSearchService();
-
-		// Call the geocode method with the geocoding parameters,
-		// the callback and an error callback function (called if a
-		// communication error occurs):
-		service.geocode({ q: fullAddress }, (result) => {
-			
-			result.items.forEach((item) => {
-				if (item.address.city == cityEleVal  || item.address.district == cityEleVal && item.address.state_code == stateCodeEleVal) {
-					$("#reg_lat").val(item.position.lat)
-					$("#reg_lng").val(item.position.lng)
-				}
-				else {
-					// this may be due to some cities actual being a distric in the API
-					// need away to account for this and re-post and grab the distric instead of the name
-					console.log("City not found")
-				}
-
-				console.log("item ->> " + JSON.stringify(item, null, 3))
-				//console.log("item  TIME ZONE ->> " + JSON.stringify(item.timeZone.utcoffset, null, 2))
+				// Flyto the country on map
+				map.flyTo([countryLat, countryLng], 5);
 			});
+}
+	
+	// State Coords
+	getStateCoords = (state) => {
+		var stateLatEleVal = document.getElementById("reg_lat").value
+		var stateLngEleVal = document.getElementById("reg_lng").value
+		var api_key = "1fbc1d9344514e01bee70dac2096ecff"
+		var api_url = `https://api.opencagedata.com/geocode/v1/json?key=${api_key}&q=${state}&pretty=1&no_annotations=1`
 
-			//getTimeZone(cityEleVal)
-		}, alert);
+		fetch(api_url)
+			.then(response => response.json())
+			.then(data => {
+				console.log("STATE COORDS: " + JSON.stringify(data, null, 2));
+
+				// Get the state coords
+				var stateLat = data.results[0].geometry.lat
+				var stateLng = data.results[0].geometry.lng
+
+				console.log("stateLat: " + data.results[0].geometry.lat);
+				console.log("stateLng: " + data.results[0].geometry.lng);
+
+				// Flyto the state on map
+				map.flyTo([stateLat, stateLng], 8);
+			});
 	}
 	/*******************************************************************************************************
 	 * END REGIONS  COORDS
@@ -550,53 +583,39 @@
 
 
 	/*******************************************************************************************************
-	 * REGIONS TIME ZONE
-	 * ****************************************************************************************************/
-	function getTimezone() {
-		const apiKey = 'VrAphDSRziIUkYqjpF3Q-Oi5QCJu9Uu3niiKGCQZ75E'
-
-		$.getJSON('https://geocode.search.hereapi.com/v1/geocode?q=' + fullAddress + '&show=tz&apiKey=' + apiKey, function (tz) {
-			document.getElementById("loc_tz_name").value = tz.items[0].timeZone.name
-			document.getElementById("loc_tz_utcoffset").value = tz.items[0].timeZone.utcOffset
-		})
-	}
-	/*******************************************************************************************************
-	 * END REGIONS  TIME ZONE
-	 * ****************************************************************************************************/
-
-	// Get Location Data ---> IS THIS NEEDED?
-	function getLocationData() {
-		const API_KEY = 'c03aea95c948480d8ec40331f8012ff1'
-		const address = $("#loc_address").val()
-		const city = $("#loc_city").val()
-		const query = address + ' ' + city
-
-		fetch("https://api.geoapify.com/v1/geocode/search?text=" + query + "&format=json&apiKey=" + API_KEY)
-			.then(response => response.json())
-			.then(result => {
-				console.log("result --> " + JSON.stringify(result.results, null, 2))
-				// console.log("LAT --> " + result.results.lat)
-				let r = result.results
-				//console.log("LON --> " + r[0].lon)
-				$("#loc_lat").val(r[0].lat)
-				$("#loc_lng").val(r[0].lon)
-				$("#loc_state").val(r[0].state_code)
-				$("#loc_zip").val(r[0].postcode)
-				$("#loc_tz_name").val(r[0].timezone.name)
-				$("#loc_tz_utcoffset").val(r[0].timezone.offset_STD + ' ' + r[0].timezone.abbreviation_STD)
-				$("#loc_country").val(r[0].country)
-
-				//console.log("r --> " + JSON.stringify(r, null, 2))
-			})
-			.catch(error => console.log('error', error));
-	}
-</script>
-
-<!-- FORM FIELDS -->
-<script>
-	/*******************************************************************************************************
 	 * REGIONS FORM FIELDS
 	 * ****************************************************************************************************/
+	// Get Continent Select values
+	var continentData = []
+	function getContinentSelectValues() {
+		fetch('/regions/get_continents', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				console.log("CONTINENTS: " + JSON.stringify(data, null, 2));
+				const continentEle = document.getElementById("reg_continent");
+				
+				var option = document.createElement("option");
+				option.value = "";
+				option.innerHTML = "Select a Continent";
+				continentEle.appendChild(option);
+
+				for (let i = 0; i < data.length; i++) {
+					var option = document.createElement("option");
+					option.value = data[i].value
+					option.innerHTML = data[i].name
+
+					continentData.push({
+						continent: data[i].name,
+						lat: data[i].lat,
+						lng: data[i].lng
+					})
+
+					continentEle.appendChild(option);
+				}
+			});
+	}
+	getContinentSelectValues()
+
 	// Add a default item to the country select
 	function intCountrySelect() {
 		var option1 = document.createElement("option");
@@ -611,7 +630,19 @@
 	}
 	intCountrySelect()
 
+	// Reset Continent Select
+	function resetContinentSelect() {
+		document.getElementById("reg_continent").value = ""
+		document.getElementById("reg_continent").placeholder = "Select a Continent";
 
+		// Create a default option item
+		var option = document.createElement("option");
+		option.value = "";
+		option.innerHTML = "Select a Continent";
+		document.getElementById("reg_continent").appendChild(option);
+	}
+
+	// Reset Country Select
 	function resetCountrySelect() {
 		document.getElementById("reg_country").value = ""
 		document.getElementById("reg_country").setAttribute("disabled", "disabled");
@@ -625,6 +656,7 @@
 		document.getElementById("reg_country").appendChild(option);
 	}
 
+	// Reset State Select
 	function resetStateSelect() {
 		document.getElementById("reg_state").value = ""
 		document.getElementById("reg_state").setAttribute("disabled", "disabled");
@@ -638,23 +670,29 @@
 		document.getElementById("reg_state").appendChild(option);
 	}
 
-	function resetCitySelect() {
-		document.getElementById("reg_city").value = ""
-		document.getElementById("reg_city").setAttribute("disabled", "disabled");
-		document.getElementById("reg_city").classList.add("disabled");
-		document.getElementById("reg_city").innerHTML = "";
 
-		// Create a default option item
-		var option = document.createElement("option");
-		option.value = "";
-		option.innerHTML = "Select a City";
-		document.getElementById("reg_city").appendChild(option);
-	}
 
 	/**
 	 * Get the countries based on the selected continent
 	 */
-	document.getElementById("reg_continent").addEventListener("change", function () {
+	 document.getElementById("reg_continent").addEventListener("change", function () {
+		// Enable the reset button
+		document.getElementById("reset-button").classList.remove("btn-disabled");
+		document.getElementById("reset-button").classList.add("btn-outline");
+
+		// Fly to the continent on map
+		/**
+		var selectedVal = document.getElementById("reg_continent").value
+		console.log("SELECTED CONTINENT: " + selectedVal)
+		console.log("CONTINENT DATA: " + JSON.stringify(continentData, null, 2))
+		
+		for (let i = 0; i < continentData.length; i++) {
+			if (continentData[i].continent == selectedVal) {
+				console.log("FLY TO: " + [continentData[i].lat, continentData[i].lng])
+				map.flyTo([continentData[i].lat, continentData[i].lng, 3]);
+			}
+		}
+		**/
 
 		// Reset state filed if it has already been selected
 		const stateEle = document.getElementById("reg_state");
@@ -668,12 +706,6 @@
 			resetCountrySelect()
 		}
 
-		// Reset city filed if it has already been selected
-		const cityEle = document.getElementById("reg_city");
-		if (cityEle.value != "") {
-			resetCitySelect()
-		}
-
 		// define form elements
 		const continentEle = document.getElementById("reg_continent");
 		const countrySelectEle = document.getElementById("reg_country");
@@ -682,6 +714,7 @@
 		fetch('/regions/get_countries/' + continentEle.value, { method: 'POST' })
 			.then(response => response.json())
 			.then(data => {
+
 				//console.log(JSON.stringify(data, null, 2));
 				countrySelectEle.removeAttribute("disabled");
 				countrySelectEle.classList.remove("disabled");
@@ -701,7 +734,7 @@
 				}
 			});
 	})
-
+	
 	/**
 	 * Get the states based on the selected country
 	 */
@@ -712,14 +745,11 @@
 			resetStateSelect()
 		}
 
-		const cityEle = document.getElementById("reg_city");
-		if (cityEle.value != "") {
-			resetCitySelect()
-		}
-
 		const regionFormEle = document.getElementById("add-region-form");
 		const countrySelectEle = document.getElementById("reg_country");
 		const stateSelectEle = document.getElementById("reg_state");
+
+		getCountryCoords(countrySelectEle.value)
 
 		// Get the states based on the selected country
 		$.post(
@@ -769,85 +799,22 @@
 		)
 	})
 
-	/**
-	 * Add a default item to the city select
-	 */
-	const citySelectEle = document.getElementById("reg_city")
-	var option = document.createElement("option");
-	option.value = "";
-	option.innerHTML = "Select a City";
-	option.className = "disabled";
-	citySelectEle.appendChild(option);
 
 	/**
-	 * Get the cities based on the selected state
+	 * Get the lat & lng of the selected state
 	 */
-	document.getElementById("reg_state").addEventListener("change", function (e) {
-		console.log("EVENT VALUE ---> " + e)
-		// Reset city filed if it has already been selected
-		const cityEle = document.getElementById("reg_city");
-		if (cityEle.value != "") {
-			//resetCitySelect()
-		}
-
-		// Define the select elements
-		const countrySelectEle = document.getElementById("reg_country");
-		const stateSelectEle = document.getElementById("reg_state");
-		const citySelectEle = document.getElementById("reg_city");
-
-		// Get the state code
-		stateCode = stateSelectEle.value
-
-		// Get the cities based on the selected state
-		fetch('/regions/get_cities/' + stateCode, { method: 'POST' })
-			.then(response => response.json())
-			.then(data => {
-				// If there are no cities in the state
-				if (data.length < 1) {
-					citySelectEle.setAttribute("disabled", "disabled");
-					citySelectEle.classList.add("disabled");
-					citySelectEle.innerHTML = "Select a City";
-
-					var option = document.createElement("option");
-					option.value = "";
-					option.innerHTML = "There are no Cities in this state";
-					citySelectEle.appendChild(option);
-					return;
-				}
-
-				// If there are states in the country
-				// Enable the select element
-				citySelectEle.removeAttribute("disabled");
-				citySelectEle.classList.remove("disabled");
-				citySelectEle.innerHTML = "";
-
-				// Create a default option item
-				var option = document.createElement("option");
-				option.value = "";
-				option.innerHTML = "Select a City";
-				citySelectEle.appendChild(option);
-
-				// Create the cities option items
-				for (let i = 0; i < data.length; i++) {
-					var option = document.createElement("option");
-					option.value = data[i];
-					option.innerHTML = data[i]
-					citySelectEle.appendChild(option);
-				}
-			});
-	})
+	 document.getElementById("reg_state").addEventListener("change", function () {
+		var selectedVal = document.getElementById("reg_state").value
+		getStateCoords(selectedVal)
+	 })
+	/*******************************************************************************************************
+	 * END REGIONS FORM FIELDS
+	 * ****************************************************************************************************/
 
 
-	/**
-	 * Get the coords now that we have a city
-	 */
-	document.getElementById("reg_city").addEventListener("change", function () {
-		getCoords()
-	})
-
-	/**
-	 * Image Upload
-	 */
+	/*******************************************************************************************************
+	 * IMAGE UPLOAD
+	 * ****************************************************************************************************/
 	$(document).ready(function () {
 		$pic = $('<img id="photo" class="!w-[350px] !h-[180px] rounded border absolute top-0 left-0 right-0 bottom-0"/>');
 
@@ -877,17 +844,17 @@
 			$("#reg_image").val("");
 		});
 	})
-
 	/*******************************************************************************************************
-	 * END REGIONS FORM FIELDS
+	 * END IMAGE UPLOAD
 	 * ****************************************************************************************************/
+
 
 
 	/*******************************************************************************************************
 	 * SUBMIT FORM
 	 * ****************************************************************************************************/
-	 function submitForm() {
+	function submitForm() {
 		$("#add-region-form").submit()
-	 }
+	}
 </script>
 {% endblock additional_js %}

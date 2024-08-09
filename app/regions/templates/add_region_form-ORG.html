@@ -1,0 +1,891 @@
+{% extends 'base.html' %}
+
+{% block additional_css %}
+<style>
+	#form-instructions {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		padding: 20px;
+		box-sizing: border-box;
+		font-size: .9rem;
+	}
+
+	#add-region-form {
+		width: 900px;
+		height: 500px;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding: 0px;
+		box-sizing: border-box;
+		margin-top: -15px;
+	}
+
+	#form-columns {
+		width: 900px;
+		height: 500px;
+		background-color: rgb(255, 255, 255);
+		display: flex;
+		flex-direction: row;
+		box-sizing: border-box;
+		padding-left: 0px;
+	}
+
+
+	#left-col {
+		width: 450px;
+		height: auto;
+		display: flex;
+		flex-direction: column;
+		padding: 20px;
+		box-sizing: border-box;
+	}
+
+	#right-col {
+		width: 450px;
+		height: auto;
+		display: flex;
+		flex-direction: column;
+		padding: 20px;
+		box-sizing: border-box;
+	}
+
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 15px;
+		box-sizing: border-box;
+		width: 100%;
+	}
+
+	select {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+		background-repeat: no-repeat;
+		background-position-x: 98%;
+		background-position-y: 50%;
+		background-color: #fff;
+		padding-right: 20px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		width: 350px;
+		height: 32px;
+		outline: none;
+		padding-left: 10px !important;
+		font-size: .8em !important;
+	}
+
+	.select,
+	.form-input {
+		height: 30px !important;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		padding-left: 10px;
+		font-size: .8em !important;
+		color: #5a5a5a !important;
+		margin-top: 5px;
+		box-sizing: border-box;
+		width: 350px;
+	}
+
+	.disabled {
+		background-color: #f0f0f0;
+		color: #5a5a5a;
+		border-radius: 4px;
+		height: 30px !important;
+	}
+
+	.form-textarea {
+		height: 80px !important;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		padding-left: 10px;
+		font-size: .8em !important;
+		color: #5a5a5a !important;
+		margin-top: 5px;
+		box-sizing: border-box;
+		width: 100%;
+	}
+
+	option {
+		padding: 4px;
+		height: 24px !important;
+	}
+
+	#buttons-container {
+		width: 100%;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		padding: 20px;
+		box-sizing: border-box;
+		margin-top: 10px !important;
+	}
+
+	.cancel-btn,
+	.submit-btn {
+		width: 100px;
+		height: 30px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		background-color: #0052a9;
+		color: white;
+		font-weight: 500;
+		font-size: .8em;
+		cursor: pointer;
+		margin-left: 15px;
+		margin-right: 0px;
+		margin-top: 10px;
+		font-size: .8rem;
+		padding: 6px;
+	}
+
+	.cancel-btn {
+		background-color: #ccc;
+		color: #5a5a5a;
+	}
+
+	.btn-outline {
+		width: auto;
+		height: 30px;
+		background-color: white;
+		color: #5a5a5a;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: .8em;
+		padding: 4px 12px;
+	}
+
+	.btn-solid {
+		width: auto;
+		height: 30px;
+		background-color: #3282b8;
+		color: #ffffff;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: .8em;
+		padding: 4px 12px;
+	}
+
+	.form-label {
+		font-size: .8em !important;
+		font-weight: 650;
+		color: #5a5a5a;
+		user-select: none;
+	}
+
+	.continent-menu-item,
+	.country-menu-item {
+		padding-left: 10px !important;
+	}
+
+	.continent-menu-item:hover,
+	.country-menu-item:hover {
+		background-color: #d2d2d2;
+	}
+
+	.rotateImg {
+		cursor: pointer;
+		text-decoration: none;
+		margin: 0 3px 5px 3px;
+		transition: all .3s ease-in-out;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.rotateImg:hover {
+		transform: rotate(360deg);
+	}
+
+	.zindex {
+		z-index: 1000;
+	}
+</style>
+{% endblock additional_css %}
+
+
+<!-- MODULE CONTAINER -->
+{% block module_container %}
+<!-- Add Region Form -->
+<div id="add-region-form-wrapper">
+	<!-- Form Header & Close Button -->
+	<div id="form-header" class="h-[42px]" style="background-color: hsla(221, 100%, 62%, 0.226);">
+		<div class="p-[8px] pt-[11px] !text-[16px] text-[#276690] font-[800] h-full ml-[10px]">Add Region
+		</div>
+		<a href="{{ url_for('regions.regions') }}">
+			<i
+				class="fa-solid fa-xmark absolute top-[10px] right-[15px] text-[20px] text-[#276690] cursor-pointer rotateImg"></i>
+		</a>
+	</div>
+
+	<!-- Form Instructions -->
+	<div id="form-instructions">
+		Please provide region details below. All fields are required.
+	</div>
+
+	<!-- Region Add Form -->
+	<form id="add-region-form" action="/add_region" method="POST" enctype="multipart/form-data" novalidate>
+		{{ form.csrf_token }}
+
+		<div id="form-columns">
+			<!-- Left Column -->
+			<div id="left-col">
+				<!-- Region Name -->
+				<div class="form-group flex flex-col">
+					<!-- Fileds -->
+					{% if form.reg_name.errors %}
+					{{ form.reg_name.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red]
+					font-[500]") }}
+					{{ form.reg_name(class_="border border-[red] w-[350px] focus:outline-none pl-[10px]
+					p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% else %}
+					{{ form.reg_name.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+					{{ form.reg_name(class_="border border-[#ccc] w-[350px] focus:outline-none pl-[10px]
+					p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_name.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Region Description -->
+				<div class="form-group flex flex-col">
+					<!-- Fileds -->
+					{% if form.reg_description.errors %}
+					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red]
+					font-[500]") }}
+					{{ form.reg_description(rows=8, class_="border border-[red] w-[350px] focus:outline-none
+					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% else %}
+					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]")
+					}}
+					{{ form.reg_description(class_="h-[161px] max-h-[161px] min-h-[161px] border border-[#ccc]
+					w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_description.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Region Continent -->
+				<div class="form-group flex flex-col">
+					{% if form.reg_continent.errors %}
+					{{ form.reg_continent.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+					{{ form.reg_continent(class_="select border border-[red]") }}
+					{% else %}
+					{{ form.reg_continent.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+					{{ form.reg_continent(class_="select") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_continent.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Region Country -->
+				<div class="form-group flex flex-col">
+					{% if form.reg_country.errors %}
+						{{ form.reg_country.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_country(class_="border border-[red]") }}
+					{% else %}
+						{{ form.reg_country.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_country(disabled=True, class_="disabled") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_country.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Region state -->
+				<div class="form-group flex flex-col">
+					{% if form.reg_state.errors %}
+					{{ form.reg_state.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+					{{ form.reg_state(class_="border border-[red]") }}
+					{% else %}
+					{{ form.reg_state.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+					{{ form.reg_state(disabled=True, class_="disabled") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_state.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Region City -->
+				<div class="form-group flex flex-col">
+					{% if form.reg_city.errors %}
+						{{ form.reg_city.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_city(class_="border border-[red]") }}
+					{% else %}
+						{{ form.reg_city.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_city(disabled=True, class_="disabled zindex") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_city.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- LAT & LNG -->
+				{{ form.reg_lat() }}
+				{{ form.reg_lng() }}
+			</div>
+
+			<!-- Right Column -->
+			<div id="right-col">
+				<!-- Region Type -->
+				<div class="form-group flex flex-col">
+					<!-- Fileds -->
+					{% if form.reg_type.errors %}
+						{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red] font-[500]") }}
+						{{ form.reg_type(class_="border border-[red] w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% else %}
+						{{ form.reg_type.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_type(class_="border border-[#ccc] w-[350px] focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_type.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Manager Name -->
+				<div class="form-group flex flex-col">
+					<!-- Fileds -->
+					{% if form.reg_manager.errors %}
+					{{ form.reg_manager.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red]
+					font-[500]") }}
+					{{ form.reg_manager(class_="border border-[red] w-[350px] focus:outline-none
+					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% else %}
+					{{ form.reg_manager.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]")
+					}}
+					{{ form.reg_manager(class_="border border-[#ccc] w-[350px] focus:outline-none
+					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_manager.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Manager Phone -->
+				<div class="form-group flex flex-col">
+					<!-- Fileds -->
+					{% if form.reg_manager_phone.errors %}
+					{{ form.reg_manager_phone.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px]
+					text-[red] font-[500]") }}
+					{{ form.reg_manager_phone(class_="border border-[red] w-[350px] focus:outline-none
+					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% else %}
+					{{ form.reg_manager_phone.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px]
+					font-[500]") }}
+					{{ form.reg_manager_phone(class_="border border-[#ccc] w-[350px] focus:outline-none
+					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_manager_phone.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Manager Emai -->
+				<div class="form-group flex flex-col">
+					<!-- Fileds -->
+					{% if form.reg_manager_email.errors %}
+					{{ form.reg_manager_email.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px]
+					text-[red] font-[500]") }}
+					{{ form.reg_manager_email(class_="border border-[red] w-[350px] focus:outline-none
+					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% else %}
+					{{ form.reg_manager_email.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px]
+					font-[500]") }}
+					{{ form.reg_manager_email(class_="border border-[#ccc] w-[350px] focus:outline-none
+					pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
+					{% endif %}
+
+					<!-- Error Message -->
+					<ul>
+						{% for error in form.reg_manager_email.errors %}
+						<li class="text-[red] text-[11px] font-[600] pt-[5px]">{{ error }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Image Upload -->
+				<label for="reg_image" class="mb-[3px] mt-[15px] !font-[#5a5a5a] !text-[12px] font-[500]">
+					Region Image
+				</label>
+				<div class="form-group mt-[0px] flex flex-col">
+					<div id="photo-box" class="w-[350px] rounded p-[0px] !h-[180px] bg-[#fff] flex flex-col border border-[#ccc] relative">
+						{{ form.reg_image(class_="hidden") }}
+						<input type="file" id="image" name="image" class="hidden">
+						<img id="photo" class="w-[100%] h-[180px] rounded border" />
+					</div>
+					<div class="flex flex-row mt-[10px] relative w-[350px]">
+						<div class="btn-outline" onclick="document.getElementById('image').click()">
+							Select a Photo
+						</div>
+						<div
+							class="border border-[#ccc] text-[12px] p-[5px] pl-[10px] pr-[10px] rounded absolute left-[316px]">
+							<i id="trashcan" class="fa-solid fa-trash cursor-pointer mt-[2px] text-[#5a5a5a]"></i>
+						</div>
+					</div>
+				</div>
+
+				{{ form.reg_lat(id='reg_lat') }}
+				{{ form.reg_lng(id='reg_lng') }}
+			</div>
+		</div>
+
+		<div class="flex flex-row w-[800px] h-[1px] border border-b-[#ccc] mt-[80px] ml-[15px]"></div>
+
+		<!-- Submit Button -->
+		<div id="buttons-container">
+			<button onclick="window.location.href='/regions'" class="btn-outline">Cancel</button>
+			{{ form.reg_submit(class_="border border-[#ccc] w-[100px] focus:outline-none ml-[15px] mr-[60px] pl-[10px] btn-solid") }}
+		</div>
+	</form>
+
+	
+</div>
+<!-- End Add Region Form -->
+
+{% endblock %}
+<!-- END MODULE CONTAINER -->
+
+
+{% block additional_js %}
+<script>
+
+
+
+
+	/*******************************************************************************************************
+	 * REGIONS COORDS
+	 * ****************************************************************************************************/
+	function getCoords() {
+		//var address = $("#region_address").val()
+		var stateCodeEleVal = document.getElementById("reg_state").value
+		var cityEleVal = document.getElementById("reg_city").value
+		var latEleVal = document.getElementById("reg_lat").value
+		var lngEleVal = document.getElementById("reg_lng").value
+
+		var fullAddress = cityEleVal + ', ' + stateCodeEleVal
+
+		console.log("STATE CODE (Line 518) ->> " + stateCodeEleVal)
+
+		// Instantiate a map and platform object:
+		var platform = new H.service.Platform({
+			'apikey': 'VrAphDSRziIUkYqjpF3Q-Oi5QCJu9Uu3niiKGCQZ75E'
+		});
+
+		// Get an instance of the geocoding service:
+		var service = platform.getSearchService();
+
+		// Call the geocode method with the geocoding parameters,
+		// the callback and an error callback function (called if a
+		// communication error occurs):
+		service.geocode({ q: fullAddress }, (result) => {
+			
+			result.items.forEach((item) => {
+				if (item.address.city == cityEleVal  || item.address.district == cityEleVal && item.address.state_code == stateCodeEleVal) {
+					$("#reg_lat").val(item.position.lat)
+					$("#reg_lng").val(item.position.lng)
+				}
+				else {
+					// this may be due to some cities actual being a distric in the API
+					// need away to account for this and re-post and grab the distric instead of the name
+					console.log("City not found")
+				}
+
+				console.log("item ->> " + JSON.stringify(item, null, 3))
+				//console.log("item  TIME ZONE ->> " + JSON.stringify(item.timeZone.utcoffset, null, 2))
+			});
+
+			//getTimeZone(cityEleVal)
+		}, alert);
+	}
+	/*******************************************************************************************************
+	 * END REGIONS  COORDS
+	 * ****************************************************************************************************/
+
+
+	/*******************************************************************************************************
+	 * REGIONS TIME ZONE
+	 * ****************************************************************************************************/
+	function getTimezone() {
+		const apiKey = 'VrAphDSRziIUkYqjpF3Q-Oi5QCJu9Uu3niiKGCQZ75E'
+
+		$.getJSON('https://geocode.search.hereapi.com/v1/geocode?q=' + fullAddress + '&show=tz&apiKey=' + apiKey, function (tz) {
+			document.getElementById("loc_tz_name").value = tz.items[0].timeZone.name
+			document.getElementById("loc_tz_utcoffset").value = tz.items[0].timeZone.utcOffset
+		})
+	}
+	/*******************************************************************************************************
+	 * END REGIONS  TIME ZONE
+	 * ****************************************************************************************************/
+
+	// Get Location Data ---> IS THIS NEEDED?
+	function getLocationData() {
+		const API_KEY = 'c03aea95c948480d8ec40331f8012ff1'
+		const address = $("#loc_address").val()
+		const city = $("#loc_city").val()
+		const query = address + ' ' + city
+
+		fetch("https://api.geoapify.com/v1/geocode/search?text=" + query + "&format=json&apiKey=" + API_KEY)
+			.then(response => response.json())
+			.then(result => {
+				console.log("result --> " + JSON.stringify(result.results, null, 2))
+				// console.log("LAT --> " + result.results.lat)
+				let r = result.results
+				//console.log("LON --> " + r[0].lon)
+				$("#loc_lat").val(r[0].lat)
+				$("#loc_lng").val(r[0].lon)
+				$("#loc_state").val(r[0].state_code)
+				$("#loc_zip").val(r[0].postcode)
+				$("#loc_tz_name").val(r[0].timezone.name)
+				$("#loc_tz_utcoffset").val(r[0].timezone.offset_STD + ' ' + r[0].timezone.abbreviation_STD)
+				$("#loc_country").val(r[0].country)
+
+				//console.log("r --> " + JSON.stringify(r, null, 2))
+			})
+			.catch(error => console.log('error', error));
+	}
+</script>
+
+<!-- FORM FIELDS -->
+<script>
+	/*******************************************************************************************************
+	 * REGIONS FORM FIELDS
+	 * ****************************************************************************************************/
+	// Add a default item to the country select
+	function intCountrySelect() {
+		var option1 = document.createElement("option");
+		option1.value = "";
+		option1.innerHTML = "Select a Country";
+		document.getElementById("reg_country").appendChild(option1);
+
+		var option2 = document.createElement("option");
+		option2.value = "";
+		option2.innerHTML = "Select a State";
+		document.getElementById("reg_state").appendChild(option2);
+	}
+	intCountrySelect()
+
+
+	function resetCountrySelect() {
+		document.getElementById("reg_country").value = ""
+		document.getElementById("reg_country").setAttribute("disabled", "disabled");
+		document.getElementById("reg_country").classList.add("disabled");
+		document.getElementById("reg_country").placeholder = "Select a Country";
+
+		// Create a default option item
+		var option = document.createElement("option");
+		option.value = "";
+		option.innerHTML = "Select a Country";
+		document.getElementById("reg_country").appendChild(option);
+	}
+
+	function resetStateSelect() {
+		document.getElementById("reg_state").value = ""
+		document.getElementById("reg_state").setAttribute("disabled", "disabled");
+		document.getElementById("reg_state").classList.add("disabled");
+		document.getElementById("reg_state").placeholder = "Select a State";
+
+		// Create a default option item
+		var option = document.createElement("option");
+		option.value = "";
+		option.innerHTML = "Select a State";
+		document.getElementById("reg_state").appendChild(option);
+	}
+
+	function resetCitySelect() {
+		document.getElementById("reg_city").value = ""
+		document.getElementById("reg_city").setAttribute("disabled", "disabled");
+		document.getElementById("reg_city").classList.add("disabled");
+		document.getElementById("reg_city").innerHTML = "";
+
+		// Create a default option item
+		var option = document.createElement("option");
+		option.value = "";
+		option.innerHTML = "Select a City";
+		document.getElementById("reg_city").appendChild(option);
+	}
+
+	/**
+	 * Get the countries based on the selected continent
+	 */
+	document.getElementById("reg_continent").addEventListener("change", function () {
+
+		// Reset state filed if it has already been selected
+		const stateEle = document.getElementById("reg_state");
+		if (stateEle.innerHTML != "Select a State") {
+			resetStateSelect()
+		}
+
+		// Reset country filed if it has already been selected
+		const countryEle = document.getElementById("reg_country");
+		if (countryEle.value != "") {
+			resetCountrySelect()
+		}
+
+		// Reset city filed if it has already been selected
+		const cityEle = document.getElementById("reg_city");
+		if (cityEle.value != "") {
+			resetCitySelect()
+		}
+
+		// define form elements
+		const continentEle = document.getElementById("reg_continent");
+		const countrySelectEle = document.getElementById("reg_country");
+
+		// get countries
+		fetch('/regions/get_countries/' + continentEle.value, { method: 'POST' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log(JSON.stringify(data, null, 2));
+				countrySelectEle.removeAttribute("disabled");
+				countrySelectEle.classList.remove("disabled");
+				countrySelectEle.innerHTML = "";
+
+				var option = document.createElement("option");
+				option.value = "";
+				option.innerHTML = "Select a Country";
+				countrySelectEle.appendChild(option);
+
+				for (let i = 0; i < data.length; i++) {
+					var option = document.createElement("option");
+					option.value = data[i];
+					option.innerHTML = data[i]
+
+					countrySelectEle.appendChild(option);
+				}
+			});
+	})
+
+	/**
+	 * Get the states based on the selected country
+	 */
+	document.getElementById("reg_country").addEventListener("change", function () {
+		// Reset state filed if it has already been selected
+		const stateEle = document.getElementById("reg_state");
+		if (stateEle.value != "") {
+			resetStateSelect()
+		}
+
+		const cityEle = document.getElementById("reg_city");
+		if (cityEle.value != "") {
+			resetCitySelect()
+		}
+
+		const regionFormEle = document.getElementById("add-region-form");
+		const countrySelectEle = document.getElementById("reg_country");
+		const stateSelectEle = document.getElementById("reg_state");
+
+		// Get the states based on the selected country
+		$.post(
+			"https://countriesnow.space/api/v0.1/countries/states",
+			{ country: countrySelectEle.value },
+			function (response) {
+				var stateObj = response.data.states
+
+				// If there are no states in the country
+				if (stateObj.length < 1) {
+					// Clear the state select
+					stateSelectEle.setAttribute("disabled", "disabled");
+					stateSelectEle.classList.add("disabled");
+					stateSelectEle.innerHTML = "";
+
+					// Create the option tag and add a default option item w/ message
+					var option = document.createElement("option");
+					option.value = "";
+					option.innerHTML = "There are no States in this country";
+					stateSelectEle.appendChild(option);
+					console.log("There are no States in this country")
+					return;
+				}
+
+				// If there are states in the country enable the select element
+				stateSelectEle.removeAttribute("disabled");
+				stateSelectEle.classList.remove("disabled");
+				stateSelectEle.innerHTML = "";
+
+				// Create a default option item
+				var option = document.createElement("option");
+				option.value = "";
+				option.innerHTML = "Select a State";
+				stateSelectEle.appendChild(option);
+
+				// Create the states option items
+				for (let i = 0; i < stateObj.length; i++) {
+					// Create the option tag
+					var option = document.createElement("option");
+					option.value = stateObj[i].state_code;
+					option.innerHTML = stateObj[i].name
+
+					// Append the state name to the option tag
+					stateSelectEle.appendChild(option);
+				}
+			}
+		)
+	})
+
+	/**
+	 * Add a default item to the city select
+	 */
+	const citySelectEle = document.getElementById("reg_city")
+	var option = document.createElement("option");
+	option.value = "";
+	option.innerHTML = "Select a City";
+	option.className = "disabled";
+	citySelectEle.appendChild(option);
+
+	/**
+	 * Get the cities based on the selected state
+	 */
+	document.getElementById("reg_state").addEventListener("change", function (e) {
+		console.log("EVENT VALUE ---> " + e)
+		// Reset city filed if it has already been selected
+		const cityEle = document.getElementById("reg_city");
+		if (cityEle.value != "") {
+			//resetCitySelect()
+		}
+
+		// Define the select elements
+		const countrySelectEle = document.getElementById("reg_country");
+		const stateSelectEle = document.getElementById("reg_state");
+		const citySelectEle = document.getElementById("reg_city");
+
+		// Get the state code
+		stateCode = stateSelectEle.value
+
+		// Get the cities based on the selected state
+		fetch('/regions/get_cities/' + stateCode, { method: 'POST' })
+			.then(response => response.json())
+			.then(data => {
+				// If there are no cities in the state
+				if (data.length < 1) {
+					citySelectEle.setAttribute("disabled", "disabled");
+					citySelectEle.classList.add("disabled");
+					citySelectEle.innerHTML = "Select a City";
+
+					var option = document.createElement("option");
+					option.value = "";
+					option.innerHTML = "There are no Cities in this state";
+					citySelectEle.appendChild(option);
+					return;
+				}
+
+				// If there are states in the country
+				// Enable the select element
+				citySelectEle.removeAttribute("disabled");
+				citySelectEle.classList.remove("disabled");
+				citySelectEle.innerHTML = "";
+
+				// Create a default option item
+				var option = document.createElement("option");
+				option.value = "";
+				option.innerHTML = "Select a City";
+				citySelectEle.appendChild(option);
+
+				// Create the cities option items
+				for (let i = 0; i < data.length; i++) {
+					var option = document.createElement("option");
+					option.value = data[i];
+					option.innerHTML = data[i]
+					citySelectEle.appendChild(option);
+				}
+			});
+	})
+
+
+	/**
+	 * Get the coords now that we have a city
+	 */
+	document.getElementById("reg_city").addEventListener("change", function () {
+		getCoords()
+	})
+
+	/**
+	 * Image Upload
+	 */
+	$(document).ready(function () {
+		$pic = $('<img id="photo" class="!w-[350px] !h-[180px] rounded border absolute top-0 left-0 right-0 bottom-0"/>');
+
+		$("#image").change(function (e) {
+			// Strip Fake Path from filename
+			const imgFilename = e.target.files[0].name;
+			$("#reg_image").val(imgFilename)
+
+			var $lbl = $("#photo-box");
+			var files = !!this.files ? this.files : [];
+			if (!files.length || !window.FileReader) {
+				$("#photo").remove();
+				$lbl.appendTo("#photo-box");
+			}
+			if (/^image/.test(files[0].type)) {
+				var reader = new FileReader();
+				reader.readAsDataURL(files[0]);
+				reader.onloadend = function () {
+					$pic.appendTo("#photo-box");
+					$("#photo").attr("src", this.result);
+				}
+			}
+		});
+
+		$("#trashcan").click(function () {
+			$("#photo").remove();
+			$("#reg_image").val("");
+		});
+	})
+
+	/*******************************************************************************************************
+	 * END REGIONS FORM FIELDS
+	 * ****************************************************************************************************/
+
+
+	/*******************************************************************************************************
+	 * SUBMIT FORM
+	 * ****************************************************************************************************/
+	 function submitForm() {
+		$("#add-region-form").submit()
+	 }
+</script>
+{% endblock additional_js %}

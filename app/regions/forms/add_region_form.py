@@ -18,37 +18,11 @@ class AddRegionForm(FlaskForm):
 
     reg_lat = HiddenField('Latitude')
     reg_lng = HiddenField('Longitude')
-    reg_continent = SelectField(
-        'Continent',
-        choices=[
-            ('', 'Select a Continent'),
-            ('Africa', 'Africa'),
-            ('Asia', 'Asia'),
-            ('Europe', 'Europe'),
-            ('North America', 'North America'),
-            ('South America', 'South America'),
-            ('Oceania', 'Oceania')
-        ],
-        validators=[InputRequired()],
-        validate_choice=False
-    )
+    reg_continent = SelectField('Continent', validators=[InputRequired()])
     reg_country = SelectField('Country', validators=[InputRequired()])
     reg_state = SelectField('State', validators=[InputRequired()])
     reg_state_code = HiddenField('State Code', validators=[InputRequired()])
     reg_city = SelectField('City', validators=[InputRequired()])
-    reg_type = SelectField(
-        'Region Type',
-        choices=[
-            ('', 'Select a Type'),
-            ('Manufacturing', 'Manufacturing'),
-            ('Energy', 'Energy'),
-            ('Office', 'Office'),
-            ('Legacy Center', 'Legacy Center'),
-            ('Housing', 'Housing'),
-            ('Schools', 'Schools'),
-            ('Medical', 'Medical')
-        ],
-        validators=[InputRequired()])
 
     reg_submit = SubmitField('Add Region')
 
