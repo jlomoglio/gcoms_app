@@ -486,7 +486,7 @@
 				url: "regions/static/js/world-administrative-boundaries.geojson"
 			})
 			.then(function (data) {
-				console.log("CONTINENT BORDERS: " + JSON.stringify(data, null, 2));
+				//console.log("CONTINENT BORDERS: " + JSON.stringify(data, null, 2));
 
 				// loop through data and get the continent by continentname
 				for (var i = 0; i < data.features.length; i++) {
@@ -583,7 +583,7 @@
 					"&polygon_geojson=1&format=json"
 			})
 			.then(function (data) {
-				console.log("STATE BORDERS: " + JSON.stringify(data, null, 2));
+				//console.log("STATE BORDERS: " + JSON.stringify(data, null, 2));
 				L.geoJSON(data[0].geojson, {
 					color: "orange",
 					weight: 2,
@@ -695,6 +695,169 @@
 			}
 		});
 	}
+
+	// Remove the previous borders before adding a new one
+	function clearMapBoundries() {
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+	}
+
+	// Get Africa Boundry Data
+	function getAfricaBoundry() {
+		clearMapBoundries()
+
+		fetch('regions/static/js/africa-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("AFRICA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "brown",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([8.7832, 34.5085], 3);
+			});
+	}
+
+	// Get Asia Boundry Data --> CHANGE GEOJSON DATA
+	function getAsiaBoundry() {
+		clearMapBoundries()
+
+		fetch('regions/static/js/asia-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				console.log("ASIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "purple",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([34.0479, 100.6197], 3);
+			});
+	}
+
+	// Get Southeast Asia Boundry Data --> CHANGE GEOJSON DATA
+	function getSoutheastAsiaBoundry() {
+		clearMapBoundries()
+
+		fetch('regions/static/js/southeast-asia.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("SOUTHEAST ASIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "purple",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([2.2180, 115.6628], 4);
+			});
+	}
+
+	// Get Europe Data --> CHANGE GEOJSON DATA
+	function getEuropeBoundry() {
+		clearMapBoundries()
+
+		fetch('regions/static/js/europe-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("EUROPE BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "blue",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([60.00085, 78.61788], 3);
+			});
+	}
+
+	// Get Russia Data --> CHANGE GEOJSON DATA
+	function getRussiaBoundry() {
+		// Remove the previous borders before adding a new one
+		clearMapBoundries()
+
+		fetch('regions/static/js/russia-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("RUSSIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "red",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([61.98084, 96.87522], 3);
+			});
+	}
+
+	// Get North America Boundry Data
+	function getNorthAmericaBoundry() {
+		clearMapBoundries()
+
+		fetch('regions/static/js/north-america-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("NORTH AMERICA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "green",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([54.5260, -105.2551], 3);
+			});
+	}
+
+	// Get South America Boundry Data
+	function getSouthAmericaBoundry() {
+		clearMapBoundries()
+
+		fetch('regions/static/js/south-america-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("SOUTH AMERICA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "green",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([-16.2902, -63.5887], 3);
+			});
+	}
+
+	// Get South Oceania Boundry Data --> CHANGE GEOJSON DATA
+	function getOceaniaBoundry() {
+		clearMapBoundries()
+
+		fetch('regions/static/js/oceania-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("OCEANIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "tan",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([-22.7359, 140.0188], 4);
+			});
+	}
+
 	/*******************************************************************************************************
 	 * END REGION MAP
 	 * ****************************************************************************************************/
@@ -736,7 +899,7 @@
 		fetch(api_url)
 			.then(response => response.json())
 			.then(data => {
-				console.log("STATE COORDS (Line 671): " + JSON.stringify(data, null, 2));
+				//console.log("STATE COORDS (Line 671): " + JSON.stringify(data, null, 2));
 
 				// Get the state coords
 				var stateLat = data.results[0].geometry.lat
@@ -757,199 +920,6 @@
 	/*******************************************************************************************************
 	 * REGIONS FORM FIELDS
 	 * ****************************************************************************************************/
-	// Get Africa Boundry Data
-	function getAfricaBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/africa-outline.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				//console.log("AFRICA BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "brown",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([8.7832, 34.5085], 3);
-			});
-	}
-
-	// Get Asia Boundry Data --> CHANGE GEOJSON DATA
-	function getAsiaBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/asia-outline.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				console.log("ASIA BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "purple",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([34.0479, 100.6197], 3);
-			});
-	}
-
-	// Get Southeast Asia Boundry Data --> CHANGE GEOJSON DATA
-	function getSoutheastAsiaBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/southeast-asia.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				console.log("SOUTHEAST ASIA BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "purple",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([2.2180, 115.6628], 4);
-			});
-	}
-
-	// Get Europe Data --> CHANGE GEOJSON DATA
-	function getEuropeBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/europe-outline.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				//console.log("EUROPE BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "blue",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([60.00085, 78.61788], 3);
-			});
-	}
-
-	// Get Russia Data --> CHANGE GEOJSON DATA
-	function getRussiaBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/russia-outline.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				//console.log("RUSSIA BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "red",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([61.98084, 96.87522], 3);
-			});
-	}
-
-	// Get North America Boundry Data
-	function getNorthAmericaBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/north-america-outline.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				//console.log("NORTH AMERICA BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "green",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([54.5260, -105.2551], 3);
-			});
-	}
-
-	// Get South America Boundry Data
-	function getSouthAmericaBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/south-america-outline.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				//console.log("SOUTH AMERICA BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "green",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([-16.2902, -63.5887], 3);
-			});
-	}
-
-	// Get South Oceania Boundry Data --> CHANGE GEOJSON DATA
-	function getOceaniaBoundry() {
-		// Remove the previous borders before adding a new one
-		map.eachLayer(function (layer) {
-			if (layer instanceof L.Polyline) {
-				map.removeLayer(layer);
-			}
-		});
-
-		fetch('regions/static/js/oceania-outline.geojson', { method: 'GET' })
-			.then(response => response.json())
-			.then(data => {
-				//console.log("OCEANIA BORDERS: " + JSON.stringify(data, null, 2));
-				L.geoJSON(data, {
-					color: "tan",
-					weight: 2,
-					opacity: 1,
-					fillOpacity: 0.2
-				}).addTo(map);
-
-				map.flyTo([-22.7359, 140.0188], 4);
-			});
-	}
-
-
 	// Get Continent Select values
 	//var continentData = []
 	function getContinentSelectValues() {
@@ -1129,53 +1099,60 @@
 		getCountryCoords(countrySelectEle.value)
 
 		// Get the states based on the selected country
-		$.post(
-			"https://countriesnow.space/api/v0.1/countries/states",
-			{ country: countrySelectEle.value },
-			function (response) {
-				var stateObj = response.data.states
 
-				//console.log("STATES: " + JSON.stringify(stateObj, null, 2));
+		fetch("https://countriesnow.space/api/v0.1/countries/states", { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				
+					var stateObj = data.data
 
-				// If there are no states in the country
-				if (stateObj.length < 1) {
-					// Clear the state select
-					stateSelectEle.setAttribute("disabled", "disabled");
-					stateSelectEle.classList.add("disabled");
+					//console.log("STATES: " + JSON.stringify(stateObj, null, 2));
+
+					// If there are no states in the country
+					if (stateObj.length < 1) {
+						// Clear the state select
+						stateSelectEle.setAttribute("disabled", "disabled");
+						stateSelectEle.classList.add("disabled");
+						stateSelectEle.innerHTML = "";
+
+						// Create the option tag and add a default option item w/ message
+						var option = document.createElement("option");
+						option.value = "";
+						option.innerHTML = "There are no States in this country";
+						stateSelectEle.appendChild(option);
+						//console.log("There are no States in this country")
+						return;
+					}
+
+					// get the states for the selected country
+					for (let i = 0; i < stateObj.length; i++) {
+						if (stateObj[i].name == countrySelectEle.value) {
+							stateObj = stateObj[i].states
+						}
+					}
+
+					// If there are states in the country enable the select element
+					stateSelectEle.removeAttribute("disabled");
+					stateSelectEle.classList.remove("disabled");
 					stateSelectEle.innerHTML = "";
 
-					// Create the option tag and add a default option item w/ message
+					// Create a default option item
 					var option = document.createElement("option");
 					option.value = "";
-					option.innerHTML = "There are no States in this country";
+					option.innerHTML = "Select a State";
 					stateSelectEle.appendChild(option);
-					//console.log("There are no States in this country")
-					return;
-				}
 
-				// If there are states in the country enable the select element
-				stateSelectEle.removeAttribute("disabled");
-				stateSelectEle.classList.remove("disabled");
-				stateSelectEle.innerHTML = "";
+					// Create the states option items
+					for (let i = 0; i < stateObj.length; i++) {
+						// Create the option tag
+						var option = document.createElement("option");
+						option.value = stateObj[i].state_code;
+						option.innerHTML = stateObj[i].name
 
-				// Create a default option item
-				var option = document.createElement("option");
-				option.value = "";
-				option.innerHTML = "Select a State";
-				stateSelectEle.appendChild(option);
-
-				// Create the states option items
-				for (let i = 0; i < stateObj.length; i++) {
-					// Create the option tag
-					var option = document.createElement("option");
-					option.value = stateObj[i].state_code;
-					option.innerHTML = stateObj[i].name
-
-					// Append the state name to the option tag
-					stateSelectEle.appendChild(option);
-				}
-			}
-		)
+						// Append the state name to the option tag
+						stateSelectEle.appendChild(option);
+					}
+			});
 	})
 
 	/**
