@@ -37,7 +37,6 @@ def get_region_cards():
 	return render_template('_region_card.html', regions=regions)
 
 
-
 @bp.route('/get_region/<int:id>', methods=['POST'])
 @login_required
 def get_region():
@@ -118,39 +117,35 @@ def get_continents():
 	continents = [
 		{
 			'name': 'Africa',
-			'value': 'Africa',
-			'lat': '8.7832',
-			'lng': '34.5085'
+			'value': 'Africa'
 		},
 		{
 			'name': 'Asia',
-			'value': 'Asia',
-			'lat': '34.0479',
-			'lng': '100.6197'
+			'value': 'Asia'
+		},
+		{
+			'name': 'Southeast Asia',
+			'value': 'Southeast Asia'
 		},
 		{
 			'name': 'Europe',
-			'value': 'Europe',
-			'lat': '54.5260',
-			'lng': '15.2551'
+			'value': 'Europe'
+		},
+		{
+			'name': 'Russia',
+			'value': 'Russia'
 		},
 		{
 			'name': 'North America',
-			'value': 'North America',
-			'lat': '70',
-			'lng': '105'
+			'value': 'North America'
 		},
 		{
 			'name': 'South America',
-			'value': 'South America',
-			'lat': '8.7832',
-			'lng': '55.4915'
+			'value': 'South America'
 		},
 		{
 			'name': 'Oceania',
-			'value': 'Oceania',
-			'lat': '22.7359',
-			'lng': '140.0188'
+			'value': 'Oceania'
 		}
 	]
 
@@ -394,7 +389,6 @@ def get_countries(continent):
 	for loc in locations:
 		if loc['continent'] == continent:
 			return loc['countries']
-
 
 
 # GETS CITIES BASED ON STATE

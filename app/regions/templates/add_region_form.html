@@ -170,7 +170,7 @@
 		background-color: #f7f7f7;
 		color: #919191;
 		border-radius: 4px;
-		border:  1px solid #ccc;
+		border: 1px solid #ccc;
 		height: 29px !important;
 		cursor: default !important;
 		font-size: .8em;
@@ -289,13 +289,17 @@
 				<div class="form-group flex flex-col">
 					<!-- Fileds -->
 					{% if form.reg_description.errors %}
-					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red] font-[500]")
+					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] text-[red]
+					font-[500]")
 					}}
-					{{ form.reg_description(rows=8, class_="border border-[red] w-[350px] focus:outline-none pl-[10px]
+					{{ form.reg_description(rows=8, class_="border border-[red] w-[350px] focus:outline-none
+					pl-[10px]
 					p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
 					{% else %}
-					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
-					{{ form.reg_description(class_="h-[90px] max-h-[90px] min-h-[90px] border border-[#ccc] w-[350px]
+					{{ form.reg_description.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]")
+					}}
+					{{ form.reg_description(class_="h-[90px] max-h-[90px] min-h-[90px] border border-[#ccc]
+					w-[350px]
 					focus:outline-none pl-[10px] p-[5px] rounded text-[12px] font-[#5a5a5a]") }}
 					{% endif %}
 
@@ -393,7 +397,8 @@
 						</div>
 						<div
 							class="border border-[#ccc] text-[12px] p-[5px] pl-[10px] pr-[10px] rounded absolute left-[316px]">
-							<i id="trashcan" class="fa-solid fa-trash cursor-pointer mt-[2px] text-[#5a5a5a]"></i>
+							<i id="trashcan"
+								class="fa-solid fa-trash cursor-pointer mt-[2px] text-[#5a5a5a]"></i>
 						</div>
 					</div>
 				</div>
@@ -405,7 +410,8 @@
 				<!-- Submit Button -->
 				<div id="buttons-container">
 					<button onclick="window.location.href='/regions'" class="btn-outline">Cancel</button>
-					{{ form.reg_submit(class_="border border-[#ccc] w-[100px] focus:outline-none ml-[15px] mr-[60px]
+					{{ form.reg_submit(class_="border border-[#ccc] w-[100px] focus:outline-none ml-[15px]
+					mr-[60px]
 					pl-[10px] btn-solid") }}
 				</div>
 			</div>
@@ -420,15 +426,17 @@
 						{{ form.reg_continent(class_="w-[170px]") }}
 					</div>
 					<div class="flex flex-col">
-						{{ form.reg_country.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_country.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]")}}
 						{{ form.reg_country(disabled=True, class_="disabled w-[170px]") }}
 					</div>
 					<div class="flex flex-col">
-						{{ form.reg_state.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]") }}
+						{{ form.reg_state.label(class_="mb-[5px] !font-[#5a5a5a] !text-[12px] font-[500]")
+						}}
 						{{ form.reg_state(disabled=True, class_="disabled w-[170px]") }}
 					</div>
 					<div class="flex flex-col">
-						<div id="reset-button" class="btn-disabled mt-[23px]" onclick="resetAddRegionMap()">Reset Map</div>
+						<div id="reset-button" class="btn-disabled mt-[23px]" onclick="resetAddRegionMap()">
+							Reset Map</div>
 					</div>
 				</div>
 				<div class="flex flex-row ">
@@ -450,13 +458,149 @@
 	/*******************************************************************************************************
 	 * REGION MAP
 	 * ****************************************************************************************************/
-	 let map = L.map('region-map').setView([28.01888, -82.11469], 3); //starting position
-	 let bounds = new L.LatLngBounds(new L.LatLng(28.01888, -82.11469), new L.LatLng(61.2, 2.5));
-	 let myAPIKey = 'ac2f04a36afe49d2a5b7ea34eab0cead' // https://www.geoapify.com/
+	let map = L.map('region-map').setView([28.01888, -82.11469], 3.2); //starting position
+	let bounds = new L.LatLngBounds(new L.LatLng(28.01888, -82.11469), new L.LatLng(61.2, 2.5));
+	let myAPIKey = 'ac2f04a36afe49d2a5b7ea34eab0cead' // https://www.geoapify.com/
 
-	 $(window).on("resize", function () { $("#region-map").height($(window).height()); map.invalidateSize(); }).trigger("resize");
 
-	 function loadMap() {
+	// Update map height on window resize
+	$(window).on("resize", function () { 
+		$("#region-map").height($(window).height()); 
+		map.invalidateSize(); 
+	}).trigger("resize");
+
+	// Draw Continent Border
+	function applyContinentBorder(continentname) {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		// Get the continent borders data
+		jQuery
+			.ajax({
+				type: "GET",
+				dataType: "json",
+				url: "regions/static/js/world-administrative-boundaries.geojson"
+			})
+			.then(function (data) {
+				console.log("CONTINENT BORDERS: " + JSON.stringify(data, null, 2));
+
+				// loop through data and get the continent by continentname
+				for (var i = 0; i < data.features.length; i++) {
+					//console.log("CONTINENTS: " + data.features[i].properties.continent );
+
+					if (data.features[i].properties.continent == continentname) {
+						var continentData = data.features[i];
+						//console.log("CONTINENT DATA: " + JSON.stringify(continentData, null, 2));
+						// Flyto the continent on map
+						var zoom
+
+						if (continentname == "Africa") {
+							getAfricaBoundry() 
+						} 
+						else if (continentname == "Antarctica") {
+							getAntarcticaBoundry()
+						} 
+						else if (continentname == "Asia") {
+							getAsiaBoundry() 
+						} 
+						else if (continentname == "Southeast Asia") {
+							getSoutheastAsiaBoundry() // NOT WORKING
+						} 
+						else if (continentname == "Europe") {
+							getEuropeBoundry()
+						} 
+						else if (continentname == "Russia") {
+							getRussiaBoundry() // NOT WORKING
+						}
+						else if (continentname == "North America") {
+							getNorthAmericaBoundry()
+						} 
+						else if (continentname == "South America") {
+							getSouthAmericaBoundry()
+						}
+						else if (continentname == "Oceania") {
+							getOceaniaBoundry()
+						} 
+					}
+				}
+			});
+	}
+
+	// Draw Country Border
+	function applyCountryBorder(countryname) {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		jQuery
+			.ajax({
+				type: "GET",
+				dataType: "json",
+				url:
+					"https://nominatim.openstreetmap.org/search?country=" +
+					countryname.trim() +
+					"&polygon_geojson=1&format=json"
+			})
+			.then(function (data) {
+				L.geoJSON(data[0].geojson, {
+					color: "blue",
+					weight: 3,
+					opacity: 1,
+					fillOpacity: 0.1
+				}).addTo(map);
+
+				// Set default zoom-level and Flyto the continent on map
+				var country_lat = data[0].lat
+				var country_lon = data[0].lon
+				var zoom = 6
+				map.flyTo([country_lat, country_lon], zoom);
+			});
+	}
+
+	// Draw State Border
+	function applyStateBorder(statename) {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		jQuery
+			.ajax({
+				type: "GET",
+				dataType: "json",
+				url:
+					"https://nominatim.openstreetmap.org/search?state=" +
+					statename.trim() +
+					"&polygon_geojson=1&format=json"
+			})
+			.then(function (data) {
+				console.log("STATE BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data[0].geojson, {
+					color: "orange",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.1
+				}).addTo(map);
+
+				// Set default zoom-level and Flyto the continent on map
+				var state_lat = data[0].lat
+				var state_lon = data[0].lon
+
+				map.flyTo([state_lat, state_lon], 7);
+			});
+	}
+
+	// Load Map
+	function loadMap() {
 		/** MAP TILES */
 		//API KEY: c03aea95c948480d8ec40331f8012ff1 || https://www.geoapify.com/geocoding-api
 		L.tileLayer('https://maps.geoapify.com/v1/tile/osm-bright-smooth/{z}/{x}/{y}@2x.png?apiKey=' + myAPIKey, {
@@ -464,67 +608,93 @@
 			maxZoom: 19.5
 		}).addTo(map);
 
-		var poly = L.polyline([
-			[37, 41],
-			[25, 32]
-		], {
-			color: 'red'
-		}).addTo(map);
-
-		/** MAP POLY LINES */
-		var options = {
-			segmentSize: 250,
-			style: {
-			    default: {
-				  weight: 3,
-				  color: 'blue'
-			    },
-			    hover: {
-				  weight: 6,
-				  color: 'orange'
-			    },
-			    editing: {
-				  weight: 2,
-				  color: 'gray'
-			    }
-			}
-		};
-		  
-		var editor = new L.Edit.PolySegmentEditing(map, poly);
-		  
-		// The segments won't show until the handler is enabled
-		editor.enable();
-		  
-		// After all the work is done
-		editor.disable();
-
-
 		/** MAP BOUNDRY */
 		let southWest = L.latLng(-89.98155760646617, -240);
 		let northEast = L.latLng(89.99346179538875, 240);
 		let bounds = L.latLngBounds(southWest, northEast);
 
+		// Map set bounds
 		map.setMaxBounds(bounds);
 		map.on('drag', function () {
-			map.panInsideBounds(bounds, { animate: true });
+			map.panInsideBounds(bounds, { animate: false });
+		});
+
+		// Draw Features
+		var drawFeatures = new L.FeatureGroup();
+		map.addLayer(drawFeatures);
+
+		// Leaflet Draw - Add Toolbar
+		var drawControl = new L.Control.Draw({
+			edit: {
+				featureGroup: drawFeatures,
+				remove: true
+			},
+			draw: {
+				polygon: {
+					shapeOptions: {
+						color: 'blue'
+					}
+				},
+				polyline: false,
+				rectangle: false,
+				circle: false,
+				marker: true,
+				circlemarker: false
+			}
+		});
+		map.addControl(drawControl);
+
+		// Draw Created
+		map.on('draw:created', function (e) {
+			var type = e.layerType
+			var layer = e.layer;
+			drawFeatures.addLayer(layer);
+		});
+
+		// Draw Edited
+		map.on('draw:edited', function (e) {
+			var layers = e.layers
+			var type = e.layerType
+
+			if (type === 'marker') {
+				layers.eachLayer(function (layer) {
+					drawFeatures.addLayer(layer);
+					console.log("Marker Layer: " + JSON.stringify(layer.toGeoJSON(), null, 2));
+				});
+			}
+
+			if (type === 'polygon') {
+				layers.eachLayer(function (layer) {
+					drawFeatures.addLayer(layer);
+					console.log("Poloygon Layer: " + JSON.stringify(layer.toGeoJSON(), null, 2));
+				});
+			}
 		});
 
 		// Get Lat & Lng on Click
-		map.on('click', function(e) {
+		//map.on('click', function (e) {
 			//alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
 			//L.circle([e.latlng.lat,e.latlng.lng], 160934).addTo(map);
-		  });
-	 }
-	 loadMap()
+		//});
+	}
+	loadMap()
 
-	 function resetAddRegionMap() {
+	// Reset Map
+	function resetAddRegionMap() {
 		map.flyTo([28.01888, -82.11469], 3);
 		resetContinentSelect()
 		resetCountrySelect()
 		resetStateSelect()
 		document.getElementById("reset-button").classList.add("btn-disabled");
 		document.getElementById("reset-button").classList.remove("btn-outline");
-	 }
+
+		// Remove the borders
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+	}
 	/*******************************************************************************************************
 	 * END REGION MAP
 	 * ****************************************************************************************************/
@@ -533,8 +703,8 @@
 	/*******************************************************************************************************
 	 * REGIONS COORDS
 	 * ****************************************************************************************************/
-	 // Country Coords
-	 function getCountryCoords(country) {
+	// Country Coords
+	function getCountryCoords(country) {
 		var countryLatEleVal = document.getElementById("reg_lat").value
 		var countryLngEleVal = document.getElementById("reg_lng").value
 		var api_key = "1fbc1d9344514e01bee70dac2096ecff"
@@ -543,17 +713,19 @@
 		fetch(api_url)
 			.then(response => response.json())
 			.then(data => {
-				console.log("COUNTRY COORDS: " + JSON.stringify(data, null, 2));
+				console.log("COUNTRY COORDS (Line 648): " + JSON.stringify(data, null, 2));
 
 				// Get the country coords
 				var countryLat = data.results[0].geometry.lat
 				var countryLng = data.results[0].geometry.lng
 
 				// Flyto the country on map
-				map.flyTo([countryLat, countryLng], 5);
+				map.flyTo([countryLat, countryLng], 6);
 			});
-}
-	
+
+		applyCountryBorder(country)
+	}
+
 	// State Coords
 	getStateCoords = (state) => {
 		var stateLatEleVal = document.getElementById("reg_lat").value
@@ -564,17 +736,17 @@
 		fetch(api_url)
 			.then(response => response.json())
 			.then(data => {
-				console.log("STATE COORDS: " + JSON.stringify(data, null, 2));
+				console.log("STATE COORDS (Line 671): " + JSON.stringify(data, null, 2));
 
 				// Get the state coords
 				var stateLat = data.results[0].geometry.lat
 				var stateLng = data.results[0].geometry.lng
 
-				console.log("stateLat: " + data.results[0].geometry.lat);
-				console.log("stateLng: " + data.results[0].geometry.lng);
+				//console.log("stateLat: " + data.results[0].geometry.lat);
+				//console.log("stateLng: " + data.results[0].geometry.lng);
 
 				// Flyto the state on map
-				map.flyTo([stateLat, stateLng], 8);
+				map.flyTo([stateLat, stateLng], 6);
 			});
 	}
 	/*******************************************************************************************************
@@ -585,15 +757,208 @@
 	/*******************************************************************************************************
 	 * REGIONS FORM FIELDS
 	 * ****************************************************************************************************/
+	// Get Africa Boundry Data
+	function getAfricaBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/africa-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("AFRICA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "brown",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([8.7832, 34.5085], 3);
+			});
+	}
+
+	// Get Asia Boundry Data --> CHANGE GEOJSON DATA
+	function getAsiaBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/asia-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				console.log("ASIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "purple",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([34.0479, 100.6197], 3);
+			});
+	}
+
+	// Get Southeast Asia Boundry Data --> CHANGE GEOJSON DATA
+	function getSoutheastAsiaBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/southeast-asia.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				console.log("SOUTHEAST ASIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "purple",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([2.2180, 115.6628], 4);
+			});
+	}
+
+	// Get Europe Data --> CHANGE GEOJSON DATA
+	function getEuropeBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/europe-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("EUROPE BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "blue",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([60.00085, 78.61788], 3);
+			});
+	}
+
+	// Get Russia Data --> CHANGE GEOJSON DATA
+	function getRussiaBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/russia-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("RUSSIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "red",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([61.98084, 96.87522], 3);
+			});
+	}
+
+	// Get North America Boundry Data
+	function getNorthAmericaBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/north-america-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("NORTH AMERICA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "green",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([54.5260, -105.2551], 3);
+			});
+	}
+
+	// Get South America Boundry Data
+	function getSouthAmericaBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/south-america-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("SOUTH AMERICA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "green",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([-16.2902, -63.5887], 3);
+			});
+	}
+
+	// Get South Oceania Boundry Data --> CHANGE GEOJSON DATA
+	function getOceaniaBoundry() {
+		// Remove the previous borders before adding a new one
+		map.eachLayer(function (layer) {
+			if (layer instanceof L.Polyline) {
+				map.removeLayer(layer);
+			}
+		});
+
+		fetch('regions/static/js/oceania-outline.geojson', { method: 'GET' })
+			.then(response => response.json())
+			.then(data => {
+				//console.log("OCEANIA BORDERS: " + JSON.stringify(data, null, 2));
+				L.geoJSON(data, {
+					color: "tan",
+					weight: 2,
+					opacity: 1,
+					fillOpacity: 0.2
+				}).addTo(map);
+
+				map.flyTo([-22.7359, 140.0188], 4);
+			});
+	}
+
+
 	// Get Continent Select values
-	var continentData = []
+	//var continentData = []
 	function getContinentSelectValues() {
 		fetch('/regions/get_continents', { method: 'GET' })
 			.then(response => response.json())
 			.then(data => {
-				console.log("CONTINENTS: " + JSON.stringify(data, null, 2));
+				//console.log("CONTINENTS: " + JSON.stringify(data, null, 2));
 				const continentEle = document.getElementById("reg_continent");
-				
+
 				var option = document.createElement("option");
 				option.value = "";
 				option.innerHTML = "Select a Continent";
@@ -603,12 +968,6 @@
 					var option = document.createElement("option");
 					option.value = data[i].value
 					option.innerHTML = data[i].name
-
-					continentData.push({
-						continent: data[i].name,
-						lat: data[i].lat,
-						lng: data[i].lng
-					})
 
 					continentEle.appendChild(option);
 				}
@@ -670,29 +1029,43 @@
 		document.getElementById("reg_state").appendChild(option);
 	}
 
-
-
 	/**
 	 * Get the countries based on the selected continent
 	 */
-	 document.getElementById("reg_continent").addEventListener("change", function () {
+	document.getElementById("reg_continent").addEventListener("change", function () {
+
 		// Enable the reset button
 		document.getElementById("reset-button").classList.remove("btn-disabled");
 		document.getElementById("reset-button").classList.add("btn-outline");
 
-		// Fly to the continent on map
-		/**
 		var selectedVal = document.getElementById("reg_continent").value
-		console.log("SELECTED CONTINENT: " + selectedVal)
-		console.log("CONTINENT DATA: " + JSON.stringify(continentData, null, 2))
-		
-		for (let i = 0; i < continentData.length; i++) {
-			if (continentData[i].continent == selectedVal) {
-				console.log("FLY TO: " + [continentData[i].lat, continentData[i].lng])
-				map.flyTo([continentData[i].lat, continentData[i].lng, 3]);
-			}
+		if (selectedVal == "North America") {
+			getNorthAmericaBoundry()
 		}
-		**/
+		else if (selectedVal == "South America") {
+			getSouthAmericaBoundry()
+		}
+		else if (selectedVal == "Russia") {
+			getRussiaBoundry()
+		}
+		else if (selectedVal == "Europe") {
+			getEuropeBoundry()
+		}
+		else if (selectedVal == "Asia") {
+			getAsiaBoundry()
+		}
+		else if (selectedVal == "Southeast Asia") {
+			getSoutheastAsiaBoundry()
+		}
+		else if (selectedVal == "Africa") {
+			getAfricaBoundry()
+		}
+		else if (selectedVal == "Oceania") {
+			getOceaniaBoundry()
+		}
+		else {
+			applyContinentBorder(selectedVal)
+		}
 
 		// Reset state filed if it has already been selected
 		const stateEle = document.getElementById("reg_state");
@@ -711,11 +1084,13 @@
 		const countrySelectEle = document.getElementById("reg_country");
 
 		// get countries
-		fetch('/regions/get_countries/' + continentEle.value, { method: 'POST' })
+		fetch('regions/static/js/countries.json', { method: 'GET' })
 			.then(response => response.json())
 			.then(data => {
 
 				//console.log(JSON.stringify(data, null, 2));
+
+				const selectedContinent = continentEle.value
 				countrySelectEle.removeAttribute("disabled");
 				countrySelectEle.classList.remove("disabled");
 				countrySelectEle.innerHTML = "";
@@ -726,15 +1101,17 @@
 				countrySelectEle.appendChild(option);
 
 				for (let i = 0; i < data.length; i++) {
-					var option = document.createElement("option");
-					option.value = data[i];
-					option.innerHTML = data[i]
+					if (data[i].continent == selectedContinent) {
+						var option = document.createElement("option");
+						option.value = data[i].country;
+						option.innerHTML = data[i].country;
+					}
 
 					countrySelectEle.appendChild(option);
 				}
 			});
 	})
-	
+
 	/**
 	 * Get the states based on the selected country
 	 */
@@ -758,6 +1135,8 @@
 			function (response) {
 				var stateObj = response.data.states
 
+				//console.log("STATES: " + JSON.stringify(stateObj, null, 2));
+
 				// If there are no states in the country
 				if (stateObj.length < 1) {
 					// Clear the state select
@@ -770,7 +1149,7 @@
 					option.value = "";
 					option.innerHTML = "There are no States in this country";
 					stateSelectEle.appendChild(option);
-					console.log("There are no States in this country")
+					//console.log("There are no States in this country")
 					return;
 				}
 
@@ -799,14 +1178,14 @@
 		)
 	})
 
-
 	/**
 	 * Get the lat & lng of the selected state
 	 */
-	 document.getElementById("reg_state").addEventListener("change", function () {
+	document.getElementById("reg_state").addEventListener("change", function () {
 		var selectedVal = document.getElementById("reg_state").value
 		getStateCoords(selectedVal)
-	 })
+		applyStateBorder(selectedVal)
+	})
 	/*******************************************************************************************************
 	 * END REGIONS FORM FIELDS
 	 * ****************************************************************************************************/
@@ -847,7 +1226,6 @@
 	/*******************************************************************************************************
 	 * END IMAGE UPLOAD
 	 * ****************************************************************************************************/
-
 
 
 	/*******************************************************************************************************
